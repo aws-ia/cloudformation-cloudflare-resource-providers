@@ -1,0 +1,32 @@
+{
+    "name": "cloudflare-dns-record",
+    "version": "0.1.0",
+    "description": "AWS custom resource provider named Cloudflare::Dns::Record.",
+    "private": true,
+    "main": "dist/handlers.js",
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "npx tsc",
+        "prepack": "npm run build",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+        "@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib": "https://github.com/cloudsoft/cloudformation-cli-typescript-plugin/releases/download/cs-release/amazon-web-services-cloudformation-cloudformation-cli-typescript-lib-1.0.1.tgz",
+        "axios": "^0.27.2",
+        "class-transformer": "0.3.1"
+    },
+    "devDependencies": {
+        "@types/jest": "^27.5.2",
+        "@types/node": "^12.0.0",
+        "freemarker-parser": "^1.2.1",
+        "jest": "^27.5.1",
+        "ts-jest": "^27.1.3",
+        "ts-node": "^10.8.1",
+        "typescript": "^4.1.2"
+    },
+    "optionalDependencies": {
+        "aws-sdk": "^2.656.0"
+    }
+}
