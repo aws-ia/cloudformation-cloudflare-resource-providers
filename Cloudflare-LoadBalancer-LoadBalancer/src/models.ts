@@ -10,6 +10,8 @@ export class ResourceModel extends BaseModel {
 
     @Exclude()
     protected readonly IDENTIFIER_KEY_ID: string = '/properties/Id';
+    @Exclude()
+    protected readonly IDENTIFIER_KEY_ZONEID: string = '/properties/ZoneId';
 
     @Expose({ name: 'Id' })
     @Transform(
@@ -38,24 +40,15 @@ export class ResourceModel extends BaseModel {
         }
     )
     name?: Optional<string>;
-    @Expose({ name: 'FallbackPoolId' })
+    @Expose({ name: 'FallbackPool' })
     @Transform(
         (value: any, obj: any) =>
-            transformValue(String, 'fallbackPoolId', value, obj, []),
+            transformValue(String, 'fallbackPool', value, obj, []),
         {
             toClassOnly: true,
         }
     )
-    fallbackPoolId?: Optional<string>;
-    @Expose({ name: 'DefaultPoolIds' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(String, 'defaultPoolIds', value, obj, [Array]),
-        {
-            toClassOnly: true,
-        }
-    )
-    defaultPoolIds?: Optional<Array<string>>;
+    fallbackPool?: Optional<string>;
     @Expose({ name: 'Description' })
     @Transform(
         (value: any, obj: any) =>
@@ -101,33 +94,45 @@ export class ResourceModel extends BaseModel {
         }
     )
     enabled?: Optional<boolean>;
+    @Expose({ name: 'DefaultPools' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'defaultPools', value, obj, [Set]),
+        {
+            toClassOnly: true,
+        }
+    )
+    defaultPools?: Optional<Set<string>>;
     @Expose({ name: 'RegionPools' })
     @Transform(
         (value: any, obj: any) =>
-            transformValue(String, 'regionPools', value, obj, [Set]),
+            transformValue(Object, 'regionPools', value, obj, [Map]),
         {
             toClassOnly: true,
         }
     )
-    regionPools?: Optional<Set<string>>;
+    regionPools?: Optional<Map<string, object>>;
     @Expose({ name: 'CountryPools' })
     @Transform(
         (value: any, obj: any) =>
-            transformValue(String, 'countryPools', value, obj, [Set]),
+            transformValue(Object, 'countryPools', value, obj, [Map]),
         {
             toClassOnly: true,
         }
     )
-    countryPools?: Optional<Set<string>>;
+    countryPools?: Optional<Map<string, object>>;
     @Expose({ name: 'PopPools' })
     @Transform(
         (value: any, obj: any) =>
-            transformValue(String, 'popPools', value, obj, [Set]),
+            transformValue(Object, 'popPools', value, obj, [Map]),
         {
             toClassOnly: true,
         }
     )
-    popPools?: Optional<Set<string>>;
+    popPools?: Optional<Map<string, object>>;
+    @Expose({ name: 'RandomSteering' })
+    @Type(() => RandomSteering)
+    randomSteering?: Optional<RandomSteering>;
     @Expose({ name: 'SessionAffinity' })
     @Transform(
         (value: any, obj: any) =>
@@ -149,12 +154,12 @@ export class ResourceModel extends BaseModel {
     @Expose({ name: 'SessionAffinityAttributes' })
     @Transform(
         (value: any, obj: any) =>
-            transformValue(String, 'sessionAffinityAttributes', value, obj, []),
+            transformValue(Object, 'sessionAffinityAttributes', value, obj, [Map]),
         {
             toClassOnly: true,
         }
     )
-    sessionAffinityAttributes?: Optional<string>;
+    sessionAffinityAttributes?: Optional<Map<string, object>>;
     @Expose({ name: 'Rules' })
     @Transform(
         (value: any, obj: any) =>
@@ -164,6 +169,15 @@ export class ResourceModel extends BaseModel {
         }
     )
     rules?: Optional<Array<string>>;
+    @Expose({ name: 'ModifiedOn' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'modifiedOn', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    modifiedOn?: Optional<string>;
 
     @Exclude()
     public getPrimaryIdentifier(): Dict {
@@ -172,8 +186,12 @@ export class ResourceModel extends BaseModel {
             identifier[this.IDENTIFIER_KEY_ID] = this.id;
         }
 
+        if (this.zoneId != null) {
+            identifier[this.IDENTIFIER_KEY_ZONEID] = this.zoneId;
+        }
+
         // only return the identifier if it can be used, i.e. if all components are present
-        return Object.keys(identifier).length === 1 ? identifier : null;
+        return Object.keys(identifier).length === 2 ? identifier : null;
     }
 
     @Exclude()
@@ -182,6 +200,22 @@ export class ResourceModel extends BaseModel {
         // only return the identifiers if any can be used
         return identifiers.length === 0 ? null : identifiers;
     }
+}
+
+export class RandomSteering extends BaseModel {
+    ['constructor']: typeof RandomSteering;
+
+
+    @Expose({ name: 'DefaultWeight' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(Number, 'defaultWeight', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    defaultWeight?: Optional<number>;
+
 }
 
 export class TypeConfigurationModel extends BaseModel {

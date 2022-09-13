@@ -24,88 +24,6 @@
                 }
             },
             "additionalProperties": false
-        },
-        "DnsRecord": {
-            "type": "object",
-            "properties": {
-                "Id": {
-                    "type": "string",
-                    "description": "DNS record identifier tag"
-                },
-                "Type": {
-                    "type": "string",
-                    "description": "Record type",
-                    "enum": [
-                        "A",
-                        "AAAA",
-                        "CNAME",
-                        "HTTPS",
-                        "TXT",
-                        "SRV",
-                        "LOC",
-                        "MX",
-                        "NS",
-                        "CERT",
-                        "DNSKEY",
-                        "DS",
-                        "NAPTR",
-                        "SMIMEA",
-                        "SSHFP",
-                        "SVCB",
-                        "TLSA",
-                        "URI"
-                    ]
-                },
-                "Meta": {
-                    "type": "object",
-                    "description": "Extra Cloudflare-specific information about the record"
-                },
-                "Locked": {
-                    "type": "boolean",
-                    "description": "Whether this record can be modified/deleted (true means it's managed by Cloudflare)"
-                },
-                "Data": {
-                    "type": "object",
-                    "description": "Metadata about the record"
-                },
-                "Name": {
-                    "type": "string",
-                    "description": "DNS record name (or @ for the zone apex)"
-                },
-                "Ttl": {
-                    "type": "number",
-                    "description": "Time to live, in seconds, of the DNS record. Must be between 60 and 86400, or 1 for 'automatic'"
-                },
-                "ZoneId": {
-                    "type": "string",
-                    "description": "Zone identifier tag"
-                },
-                "ModifiedOn": {
-                    "type": "string",
-                    "description": "When the record was last modified"
-                },
-                "CreatedOn": {
-                    "type": "string",
-                    "description": "When the record was created"
-                },
-                "Proxiable": {
-                    "type": "boolean",
-                    "description": "Whether the record can be proxied by Cloudflare or not"
-                },
-                "Content": {
-                    "type": "string",
-                    "description": "A valid IPv4 address"
-                },
-                "Proxied": {
-                    "type": "boolean",
-                    "description": "Whether the record is receiving the performance and security benefits of Cloudflare"
-                },
-                "ZoneName": {
-                    "type": "string",
-                    "description": "The domain of the record"
-                }
-            },
-            "additionalProperties": false
         }
     },
     "properties": {
@@ -184,28 +102,27 @@
         "ZoneName": {
             "type": "string",
             "description": "The domain of the record"
-        },
-        "DnsRecord": {
-            "$ref": "#/definitions/DnsRecord"
         }
     },
     "additionalProperties": false,
     "required": [
-        "/properties/Id"
+        "ZoneId",
+        "Name",
+        "Type",
+        "Content",
+        "Ttl"
     ],
     "readOnlyProperties": [
         "/properties/Id",
         "/properties/Locked",
-        "/properties/ZoneId",
         "/properties/ModifiedOn",
         "/properties/CreatedOn",
         "/properties/Proxiable",
-        "/properties/Type",
-        "/properties/ZoneName",
-        "/properties/Group"
+        "/properties/ZoneName"
     ],
     "primaryIdentifier": [
-        "/properties/Id"
+        "/properties/Id",
+        "/properties/ZoneId"
     ],
     "handlers": {
         "create": {

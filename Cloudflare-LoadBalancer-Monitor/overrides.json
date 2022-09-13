@@ -1,0 +1,39 @@
+{
+  "CREATE": {
+    "/ExpectedBody": "",
+    "/ExpectedCodes": "200",
+    "/Method": "GET",
+    "/Timeout": 5,
+    "/Path": "/",
+    "/Interval": 60,
+    "/Retries": 2,
+    "/Description": "GET over HTTPS - expect 200",
+    "/Type": "http",
+    "/Port": 80,
+    "/AccountIdentifier": "a5b4f7b4d7ad87560079512352581a8f",
+    "/FollowRedirects": false,
+    "/AllowInsecure": false,
+    "/ProbeZone": "",
+    "/Header": {
+    }
+  },
+  "UPDATE": {
+    "/ExpectedBody": "",
+    "/ExpectedCodes": "200",
+    "/Method": "GET",
+    "/Timeout": 5,
+    "/Path": "/",
+    "/Interval": 60,
+    "/Retries": 2,
+    "/Description": "Some Other Description",
+    "/Type": "http",
+    "/Port": 80,
+    "/AccountIdentifier": "a5b4f7b4d7ad87560079512352581a8f",
+    "/FollowRedirects": false,
+    "/AllowInsecure": false,
+    "/ProbeZone": "",
+    "/Header": {
+    }
+  }
+
+}

@@ -10,6 +10,8 @@ export class ResourceModel extends BaseModel {
 
     @Exclude()
     protected readonly IDENTIFIER_KEY_ID: string = '/properties/Id';
+    @Exclude()
+    protected readonly IDENTIFIER_KEY_ACCOUNTIDENTIFIER: string = '/properties/AccountIdentifier';
 
     @Expose({ name: 'Id' })
     @Transform(
@@ -20,6 +22,15 @@ export class ResourceModel extends BaseModel {
         }
     )
     id?: Optional<string>;
+    @Expose({ name: 'AccountIdentifier' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'accountIdentifier', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    accountIdentifier?: Optional<string>;
     @Expose({ name: 'ExpectedBody' })
     @Transform(
         (value: any, obj: any) =>
@@ -140,12 +151,21 @@ export class ResourceModel extends BaseModel {
     @Expose({ name: 'ProbeZone' })
     @Transform(
         (value: any, obj: any) =>
-            transformValue(Boolean, 'probeZone', value, obj, []),
+            transformValue(String, 'probeZone', value, obj, []),
         {
             toClassOnly: true,
         }
     )
-    probeZone?: Optional<boolean>;
+    probeZone?: Optional<string>;
+    @Expose({ name: 'ModifiedOn' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'modifiedOn', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    modifiedOn?: Optional<string>;
 
     @Exclude()
     public getPrimaryIdentifier(): Dict {
@@ -154,8 +174,12 @@ export class ResourceModel extends BaseModel {
             identifier[this.IDENTIFIER_KEY_ID] = this.id;
         }
 
+        if (this.accountIdentifier != null) {
+            identifier[this.IDENTIFIER_KEY_ACCOUNTIDENTIFIER] = this.accountIdentifier;
+        }
+
         // only return the identifier if it can be used, i.e. if all components are present
-        return Object.keys(identifier).length === 1 ? identifier : null;
+        return Object.keys(identifier).length === 2 ? identifier : null;
     }
 
     @Exclude()

@@ -1,11 +1,16 @@
-# Cloudflare::ZoneSettings::Override
+# Cloudflare::LoadBalancer::Pool
+
+## Tests
+To run the contract tests here you will need to set up a Cloudflare::LoadBalancer::Monitor first
+
+## Development
 
 Congratulations on starting development! Next steps:
 
-1. Write the JSON schema describing your resource, [cloudflare-zonesettings-override.json](./cloudflare-zonesettings-override.json)
-2. Implement your resource handlers in [handlers.ts](./cloudflare-zonesettings-override/handlers.ts)
+1. Write the JSON schema describing your resource, [cloudflare-loadbalancer-pool.json](./cloudflare-loadbalancer-pool.json)
+2. Implement your resource handlers in [handlers.ts](./cloudflare-loadbalancer-pool/handlers.ts)
 
-> Don't modify [models.ts](./cloudflare-zonesettings-override/models.ts) by hand, any modifications will be overwritten when the `generate` or `package` commands are run.
+> Don't modify [models.ts](./cloudflare-loadbalancer-pool/models.ts) by hand, any modifications will be overwritten when the `generate` or `package` commands are run.
 
 Implement CloudFormation resource here. Each function must always return a ProgressEvent.
 

@@ -1,160 +1,112 @@
-import {
-    Action,
-    BaseResource,
-    exceptions,
-    handlerEvent,
-    HandlerErrorCode,
-    LoggerProxy,
-    OperationStatus,
-    Optional,
-    ProgressEvent,
-    ResourceHandlerRequest,
-    SessionProxy,
-} from '@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib';
-import { ResourceModel, TypeConfigurationModel } from './models';
+import {AbstractCloudflareResource} from "../../Cloudflare-Common/src/abstract-cloudflare-resource";
+import {ResourceModel, TypeConfigurationModel} from './models';
+import {CloudflareClient} from "../../Cloudflare-Common/src/cloudflare-client";
+import {exceptions} from "@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib";
+import {CaseTransformer, Transformer} from "../../Cloudflare-Common/src/util";
+import {version} from "../package.json";
 
 interface CallbackContext extends Record<string, any> {}
 
-class Resource extends BaseResource<ResourceModel> {
-
-    /**
-     * CloudFormation invokes this handler when the resource is initially created
-     * during stack create operations.
-     *
-     * @param session Current AWS session passed through from caller
-     * @param request The request object for the provisioning request passed to the implementor
-     * @param callbackContext Custom context object to allow the passing through of additional
-     * state or metadata between subsequent retries
-     * @param logger Logger to proxy requests to default publishers
-     */
-    @handlerEvent(Action.Create)
-    public async create(
-        session: Optional<SessionProxy>,
-        request: ResourceHandlerRequest<ResourceModel>,
-        callbackContext: CallbackContext,
-        logger: LoggerProxy
-    ): Promise<ProgressEvent<ResourceModel, CallbackContext>> {
-        const model = new ResourceModel(request.desiredResourceState);
-        const progress = ProgressEvent.progress<ProgressEvent<ResourceModel, CallbackContext>>(model);
-        // TODO: put code here
-
-        // Example:
-        try {
-            if (session instanceof SessionProxy) {
-                const client = session.client('S3');
-            }
-            // Setting Status to success will signal to CloudFormation that the operation is complete
-            progress.status = OperationStatus.Success;
-        } catch(err) {
-            logger.log(err);
-            // exceptions module lets CloudFormation know the type of failure that occurred
-            throw new exceptions.InternalFailure(err.message);
-            // this can also be done by returning a failed progress event
-            // return ProgressEvent.failed(HandlerErrorCode.InternalFailure, err.message);
-        }
-        return progress;
-    }
-
-    /**
-     * CloudFormation invokes this handler when the resource is updated
-     * as part of a stack update operation.
-     *
-     * @param session Current AWS session passed through from caller
-     * @param request The request object for the provisioning request passed to the implementor
-     * @param callbackContext Custom context object to allow the passing through of additional
-     * state or metadata between subsequent retries
-     * @param logger Logger to proxy requests to default publishers
-     */
-    @handlerEvent(Action.Update)
-    public async update(
-        session: Optional<SessionProxy>,
-        request: ResourceHandlerRequest<ResourceModel>,
-        callbackContext: CallbackContext,
-        logger: LoggerProxy
-    ): Promise<ProgressEvent<ResourceModel, CallbackContext>> {
-        const model = new ResourceModel(request.desiredResourceState);
-        const progress = ProgressEvent.progress<ProgressEvent<ResourceModel, CallbackContext>>(model);
-        // TODO: put code here
-        progress.status = OperationStatus.Success;
-        return progress;
-    }
-
-    /**
-     * CloudFormation invokes this handler when the resource is deleted, either when
-     * the resource is deleted from the stack as part of a stack update operation,
-     * or the stack itself is deleted.
-     *
-     * @param session Current AWS session passed through from caller
-     * @param request The request object for the provisioning request passed to the implementor
-     * @param callbackContext Custom context object to allow the passing through of additional
-     * state or metadata between subsequent retries
-     * @param logger Logger to proxy requests to default publishers
-     */
-    @handlerEvent(Action.Delete)
-    public async delete(
-        session: Optional<SessionProxy>,
-        request: ResourceHandlerRequest<ResourceModel>,
-        callbackContext: CallbackContext,
-        logger: LoggerProxy
-    ): Promise<ProgressEvent<ResourceModel, CallbackContext>> {
-        const model = new ResourceModel(request.desiredResourceState);
-        const progress = ProgressEvent.progress<ProgressEvent<ResourceModel, CallbackContext>>();
-        // TODO: put code here
-        progress.status = OperationStatus.Success;
-        return progress;
-    }
-
-    /**
-     * CloudFormation invokes this handler as part of a stack update operation when
-     * detailed information about the resource's current state is required.
-     *
-     * @param session Current AWS session passed through from caller
-     * @param request The request object for the provisioning request passed to the implementor
-     * @param callbackContext Custom context object to allow the passing through of additional
-     * state or metadata between subsequent retries
-     * @param logger Logger to proxy requests to default publishers
-     */
-    @handlerEvent(Action.Read)
-    public async read(
-        session: Optional<SessionProxy>,
-        request: ResourceHandlerRequest<ResourceModel>,
-        callbackContext: CallbackContext,
-        logger: LoggerProxy
-    ): Promise<ProgressEvent<ResourceModel, CallbackContext>> {
-        const model = new ResourceModel(request.desiredResourceState);
-        // TODO: put code here
-        const progress = ProgressEvent.success<ProgressEvent<ResourceModel, CallbackContext>>(model);
-        return progress;
-    }
-
-    /**
-     * CloudFormation invokes this handler when summary information about multiple
-     * resources of this resource provider is required.
-     *
-     * @param session Current AWS session passed through from caller
-     * @param request The request object for the provisioning request passed to the implementor
-     * @param callbackContext Custom context object to allow the passing through of additional
-     * state or metadata between subsequent retries
-     * @param logger Logger to proxy requests to default publishers
-     */
-    @handlerEvent(Action.List)
-    public async list(
-        session: Optional<SessionProxy>,
-        request: ResourceHandlerRequest<ResourceModel>,
-        callbackContext: CallbackContext,
-        logger: LoggerProxy
-    ): Promise<ProgressEvent<ResourceModel, CallbackContext>> {
-        const model = new ResourceModel(request.desiredResourceState);
-        // TODO: put code here
-        const progress = ProgressEvent.builder<ProgressEvent<ResourceModel, CallbackContext>>()
-            .status(OperationStatus.Success)
-            .resourceModels([model])
-            .build();
-        return progress;
-    }
+type LoadBalancers = {
+    success: boolean,
+    errors: string[],
+    messages: string[],
+    result: any[]
+};
+// The type below are only partial representation of what the API is returning. It's only needed for TypeScript niceties
+type LoadBalancer = {
+    success: boolean,
+    errors: string[],
+    messages: string[],
+    result: any
 }
 
-export const resource = new Resource(ResourceModel.TYPE_NAME, ResourceModel, TypeConfigurationModel);
+class Resource extends AbstractCloudflareResource<ResourceModel, ResourceModel, ResourceModel, ResourceModel, TypeConfigurationModel> {
+
+    private userAgent = `AWS CloudFormation (+https://aws.amazon.com/cloudformation/) CloudFormation resource ${this.typeName}/${version}`;
+
+    async get(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<ResourceModel> {
+        if(!model.id) {
+            throw new exceptions.AlreadyExists(this.typeName, null);
+        }
+
+        const response = await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<LoadBalancer>(
+            'get',
+            `/zones/${model.zoneId}/load_balancers/${model.id}`,
+            null,null, this.loggerProxy);
+
+        return new ResourceModel(response.data.result);
+    }
+
+    async list(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<ResourceModel[]> {
+        const response = await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<LoadBalancers>(
+                'get',
+                `/zones/${model.zoneId}/load_balancers/`,
+                null, null, this.loggerProxy);
+        return response.data.result.map(group => this.setModelFrom(new ResourceModel(model), new ResourceModel(group)));
+    }
+
+    async create(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<ResourceModel> {
+        const body = Transformer.for(model.toJSON())
+            .transformKeys(CaseTransformer.PASCAL_TO_SNAKE)
+            .transform();
+        const response = await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<LoadBalancer>(
+            'post',
+            `/zones/${(model.zoneId)}/load_balancers`,
+            {},
+            body,
+            this.loggerProxy);
+
+        return new ResourceModel(response.data.result);
+    }
+
+    async update(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<ResourceModel> {
+        let body = Transformer.for(model.toJSON())
+            .transformKeys(CaseTransformer.PASCAL_TO_SNAKE)
+            .transform();
+        const response = await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<LoadBalancer>(
+            'put',
+            `/zones/${model.zoneId}/load_balancers/${model.id}`,
+            {},
+            body,
+            this.loggerProxy);
+        return new ResourceModel(response.data.result);
+    }
+
+    async delete(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<void> {
+        await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<LoadBalancer>(
+            'delete',
+            `/zones/${model.zoneId}/load_balancers/${model.id}`,
+            null,
+            null,
+            this.loggerProxy);
+    }
+
+    newModel(partial: any): ResourceModel {
+        return new ResourceModel(partial);
+    }
+
+    setModelFrom(model: ResourceModel, from: ResourceModel | undefined): ResourceModel {
+        if (!from) {
+            return model;
+        }
+        let resourceModel = new ResourceModel({
+            ...model,
+            ...Transformer.for(from)
+                .transformKeys(CaseTransformer.SNAKE_TO_CAMEL)
+                .forModelIngestion()
+                .transform()
+        });
+
+        delete resourceModel.sessionAffinityAttributes;
+
+        return resourceModel;
+    }
+
+
+}
+
+export const resource = new Resource(ResourceModel.TYPE_NAME, ResourceModel, null, null, TypeConfigurationModel);
 
 // Entrypoint for production usage after registered in CloudFormation
 export const entrypoint = resource.entrypoint;

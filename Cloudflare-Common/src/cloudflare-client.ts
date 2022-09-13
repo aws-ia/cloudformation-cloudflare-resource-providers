@@ -17,10 +17,12 @@ export type PaginatedResponseType = {
 export class CloudflareClient {
     private baseUrl: string;
     private apiKey: string;
+    private userAgent: string;
 
-    constructor(baseUrl: string, apiKey: string) {
+    constructor(baseUrl: string, apiKey: string, userAgent: string) {
         this.baseUrl = baseUrl;
         this.apiKey = apiKey;
+        this.userAgent = userAgent;
     }
 
     public async doRequest<ResponseType>(method: 'get' | 'put' | 'post' | 'delete', path: string, params: any = {}, body?: {}, logger?: LoggerProxy): Promise<AxiosResponse<ResponseType>> {
@@ -28,8 +30,9 @@ export class CloudflareClient {
             url: `${this.baseUrl}${path}`,
             params: params,
             method: method,
-            data: this.sanitizePayload(body),
+            data: body,
             headers: {
+                'User-Agent': this.userAgent || "AWS CloudFormation (+https://aws.amazon.com/cloudformation/) CloudFormation custom resource",
                 Authorization: `Bearer ${this.apiKey}`,
                 'Content-type': 'application/json; charset=utf-8',
                 Accept: 'application/json; charset=utf-8'
@@ -51,34 +54,5 @@ export class CloudflareClient {
         }
 
         return results;
-    }
-
-    private sanitizePayload(model: { [key: string]: any }) {
-        if (!model) {
-            return model;
-        }
-
-        return Object.keys(model).reduce((map, key) => {
-            let value = model[key];
-            if (value && value instanceof Object && !(value instanceof Array) && !(value instanceof Set)) {
-                value = this.sanitizePayload(value);
-            }
-            if (value && value instanceof Set) {
-                value = Array.of(...value);
-            }
-            if (value && Array.isArray(value)) {
-                value = value.map(item => item && item instanceof Object && !(item instanceof Array) && !(item instanceof Set)
-                    ? this.sanitizePayload(item)
-                    : item);
-            }
-            if (key == "Ios") {
-                map["iOS"] = value;
-            } else if (key == "AuthURL") {
-                map["authURL"] = value;
-            } else if (key != "OktaAccess") {
-                map[key.substring(0, 1).toLocaleLowerCase() + key.substring(1)] = value;
-            }
-            return map;
-        }, {} as { [key: string]: any })
     }
 }
