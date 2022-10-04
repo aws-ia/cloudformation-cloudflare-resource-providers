@@ -1,6 +1,6 @@
 # Cloudflare::LoadBalancer::Monitor
 
-An example resource schema demonstrating some basic constructs and validation rules.
+A Monitor policy to configure monitoring of endpoint health
 
 ## Syntax
 

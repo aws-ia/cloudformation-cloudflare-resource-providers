@@ -1,6 +1,6 @@
 # Cloudflare::LoadBalancer::Pool
 
-An example resource schema demonstrating some basic constructs and validation rules.
+A resource to manage a pool of origin servers
 
 ## Syntax
 
@@ -86,6 +86,8 @@ _Type_: List of <a href="origin.md">Origin</a>
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
 #### NotificationFilter
+
+Filter pool and origin health notifications by resource type or health status. Use null to reset
 
 _Required_: No
 

@@ -11,7 +11,7 @@
     "build": "npx tsc",
     "watch": "npx tsc -w",
     "prepack": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "dependencies": {
     "@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib": "^1.0.3",

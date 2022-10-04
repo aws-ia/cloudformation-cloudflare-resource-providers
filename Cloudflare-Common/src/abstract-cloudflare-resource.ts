@@ -28,7 +28,7 @@ export abstract class AbstractCloudflareResource<ResourceModelType extends BaseM
             case 429:
                 throw new exceptions.ServiceLimitExceeded(errorMessage);
             default:
-                throw new exceptions.InternalFailure(`  Unexpected error occurred while talking to the Cloudflare API (HTTP status ${status}) => ${errorMessage}`);
+                throw new exceptions.InternalFailure(`Unexpected error occurred while talking to the Cloudflare API (HTTP status ${status}) => ${errorMessage}`);
         }
     }
 }

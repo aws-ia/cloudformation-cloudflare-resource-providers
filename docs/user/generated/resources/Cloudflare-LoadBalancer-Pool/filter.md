@@ -1,5 +1,7 @@
 # Cloudflare::LoadBalancer::Pool Filter
 
+Filter pool and origin health notifications by resource type or health status. Use null to reset
+
 ## Syntax
 
 To declare this entity in your AWS CloudFormation template, use the following syntax:

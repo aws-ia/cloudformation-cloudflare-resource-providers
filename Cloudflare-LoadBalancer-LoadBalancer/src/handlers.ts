@@ -27,7 +27,7 @@ class Resource extends AbstractCloudflareResource<ResourceModel, ResourceModel, 
 
     async get(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<ResourceModel> {
         if(!model.id) {
-            throw new exceptions.AlreadyExists(this.typeName, null);
+            throw new exceptions.NotFound(this.typeName, null);
         }
 
         const response = await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<LoadBalancer>(

@@ -1,6 +1,6 @@
 {
     "typeName": "Cloudflare::Dns::Record",
-    "description": "An example resource schema demonstrating some basic constructs and validation rules.",
+    "description": "A Cloudflare resource for managing a single DNS record",
     "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
     "typeConfiguration": {
         "properties": {
@@ -37,21 +37,21 @@
             "enum": [
                 "A",
                 "AAAA",
-                "CNAME",
-                "HTTPS",
-                "TXT",
-                "SRV",
-                "LOC",
-                "MX",
-                "NS",
                 "CERT",
+                "CNAME",
                 "DNSKEY",
                 "DS",
+                "HTTPS",
+                "LOC",
+                "MX",
                 "NAPTR",
+                "NS",
                 "SMIMEA",
+                "SRV",
                 "SSHFP",
                 "SVCB",
                 "TLSA",
+                "TXT",
                 "URI"
             ]
         },

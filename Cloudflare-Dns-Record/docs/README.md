@@ -1,6 +1,6 @@
 # Cloudflare::Dns::Record
 
-An example resource schema demonstrating some basic constructs and validation rules.
+A Cloudflare resource for managing a single DNS record
 
 ## Syntax
 
@@ -49,7 +49,7 @@ _Required_: Yes
 
 _Type_: String
 
-_Allowed Values_: <code>A</code> | <code>AAAA</code> | <code>CNAME</code> | <code>HTTPS</code> | <code>TXT</code> | <code>SRV</code> | <code>LOC</code> | <code>MX</code> | <code>NS</code> | <code>CERT</code> | <code>DNSKEY</code> | <code>DS</code> | <code>NAPTR</code> | <code>SMIMEA</code> | <code>SSHFP</code> | <code>SVCB</code> | <code>TLSA</code> | <code>URI</code>
+_Allowed Values_: <code>A</code> | <code>AAAA</code> | <code>CERT</code> | <code>CNAME</code> | <code>DNSKEY</code> | <code>DS</code> | <code>HTTPS</code> | <code>LOC</code> | <code>MX</code> | <code>NAPTR</code> | <code>NS</code> | <code>SMIMEA</code> | <code>SRV</code> | <code>SSHFP</code> | <code>SVCB</code> | <code>TLSA</code> | <code>TXT</code> | <code>URI</code>
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 

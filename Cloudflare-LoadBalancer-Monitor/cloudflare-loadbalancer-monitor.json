@@ -1,6 +1,6 @@
 {
     "typeName": "Cloudflare::LoadBalancer::Monitor",
-    "description": "An example resource schema demonstrating some basic constructs and validation rules.",
+    "description": "A Monitor policy to configure monitoring of endpoint health",
     "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
     "typeConfiguration": {
         "properties": {

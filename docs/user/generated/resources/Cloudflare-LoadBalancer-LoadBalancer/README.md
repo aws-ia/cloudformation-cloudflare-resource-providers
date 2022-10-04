@@ -1,6 +1,6 @@
 # Cloudflare::LoadBalancer::LoadBalancer
 
-An example resource schema demonstrating some basic constructs and validation rules.
+A Cloudflare resource for managing load-balancing across pools
 
 ## Syntax
 
