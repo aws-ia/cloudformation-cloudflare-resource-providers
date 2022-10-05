@@ -1,0 +1,81 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: |
+    The following CloudFormation allow the creation and configuration of DNS Records.
+  
+
+Parameters:
+  ZoneId:
+    Type: String
+  AccountId:
+    Type: String
+  DomainName:
+    Type: String
+
+Resources:
+  DnsRecord:
+    Type: Cloudflare::Dns::Record
+    Properties:
+      ZoneId: !Ref ZoneId
+      Type: A
+      Name: !Ref DomainName
+      Content: <IP ADDRESS>
+      Proxied: false
+      Ttl: 1
+
+  Monitor:
+    Type: Cloudflare::LoadBalancer::Monitor
+    Properties:
+      "ExpectedCodes": "200"
+      "Method": "GET"
+      "Timeout": 5
+      "Path": "/"
+      "Interval": 60
+      "Retries": 2
+      "Description": "GET over HTTPS - expect 200"
+      "Type": "http"
+      "Port": 80
+      "AccountIdentifier": !Ref AccountId
+      "FollowRedirects": false
+      "AllowInsecure": false
+      "ProbeZone": ""
+
+  Pool:
+    Type: Cloudflare::LoadBalancer::Pool
+    Properties:
+      "AccountIdentifier": !Ref AccountId
+      "MinimumOrigins": 1
+      "CheckRegions":
+      - "WEU"
+      "NotificationEmail": "email@example.com"
+      "NotificationFilter":
+        "Pool":
+          "Healthy": false
+      "Origins":
+      - "Enabled": true
+        "Address": <IP Address>
+        "Name": "server-1"
+        "Weight": 0.9
+      - "Weight": 0.1
+        "Enabled": true
+        "Name": "server-2"
+        "Address": <IP Address>
+      "Name": "Servers"
+      "Description": "Region Pool"
+      "Monitor": !GetAtt Monitor.Id
+
+  LoadBalancer:
+    Type: Cloudflare::LoadBalancer::LoadBalancer
+    Properties:
+      "ZoneId": !Ref ZoneId
+      "Proxied": true
+      "Name": !Ref DomainName
+      "SessionAffinity": "none"
+      "SessionAffinityAttributes":
+        "ZeroDowntimeFailover": "none"
+      "SteeringPolicy": "off"
+      "RandomSteering":
+        "DefaultWeight": 1
+      "DefaultPools":
+      - !GetAtt Pool.Id
+      "FallbackPool": !GetAtt Pool.Id
+      "Enabled": true

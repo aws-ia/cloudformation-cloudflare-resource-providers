@@ -1,0 +1,18 @@
+{
+  "CREATE": {
+    "/ZoneId": "0777091bb12ec47977fcc17e08b73a64",
+    "/Type": "A",
+    "/Name": "<www.example.com>",
+    "/Content": "<a.b.c.d>",
+    "/Proxied": false,
+    "/Ttl": 1
+  },
+  "UPDATE": {
+    "/ZoneId": "0777091bb12ec47977fcc17e08b73a64",
+    "/Type": "A",
+    "/Name": "<www.example.com>",
+    "/Content": "<a.b.c.d>",
+    "/Proxied": false,
+    "/Ttl": 1
+  }
+}

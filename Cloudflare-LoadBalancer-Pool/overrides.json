@@ -1,0 +1,66 @@
+{
+  "CREATE": {
+    "/AccountIdentifier": "a5b4f7b4d7ad87560079512352581a8f",
+    "/MinimumOrigins": 1,
+    "/CheckRegions": [
+      "WEU"
+    ],
+    "/NotificationEmail": "email@example.com",
+    "/NotificationFilter": {
+      "Pool": {
+        "Healthy": false
+      }
+    },
+    "/Origins": [
+      {
+        "Enabled": true,
+        "Address": "<a.b.c.d>",
+        "Name": "server-1",
+        "Weight": 0.9
+      },
+      {
+        "Weight": 0.1,
+        "Enabled": true,
+        "Name": "server-2",
+        "Address": "<a.b.c.d>"
+      }
+    ],
+    "/Name": "Servers",
+    "/Description": "Region Pool",
+    "/Monitor": "<monitor id>",
+    "/Longitude": null,
+    "/Latitude": null
+  },
+  "UPDATE": {
+    "/AccountIdentifier": "a5b4f7b4d7ad87560079512352581a8f",
+    "/MinimumOrigins": 1,
+    "/CheckRegions": [
+      "WEU"
+    ],
+    "/NotificationEmail": "email@example.com",
+    "/NotificationFilter": {
+      "Pool": {
+        "Healthy": false
+      }
+    },
+    "/Origins": [
+      {
+        "Enabled": true,
+        "Address": "<a.b.c.d>",
+        "Name": "server-1",
+        "Weight": 0.9
+      },
+      {
+        "Weight": 0.1,
+        "Enabled": true,
+        "Name": "server-2",
+        "Address": "<a.b.c.d>"
+      }
+    ],
+    "/Name": "Servers",
+    "/Description": "Servers",
+    "/Monitor": "<monitor id>",
+    "/Longitude": null,
+    "/Latitude": null
+  }
+}
