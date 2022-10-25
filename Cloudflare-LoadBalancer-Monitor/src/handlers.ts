@@ -44,7 +44,7 @@ class Resource extends AbstractCloudflareResource<ResourceModel, ResourceModel, 
                 `/accounts/${model.accountIdentifier}/load_balancers/monitors/`,
                 null, null, this.loggerProxy);
 
-        return response.data.result.map(group => this.setModelFrom(new ResourceModel(), new ResourceModel(group)));
+        return response.data.result.map(group => this.setModelFrom(new ResourceModel({accountIdentifier: model.accountIdentifier}), new ResourceModel(group)));
     }
 
     async create(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<ResourceModel> {
