@@ -5,76 +5,72 @@ import {exceptions} from "@amazon-web-services-cloudformation/cloudformation-cli
 import {CaseTransformer, Transformer} from "../../Cloudflare-Common/src/util";
 import {version} from "../package.json";
 
-interface CallbackContext extends Record<string, any> {}
-
-type LoadBalancers = {
+type CloudflareResponse<T> = {
     success: boolean,
     errors: string[],
     messages: string[],
-    result: any[]
-};
-// The type below are only partial representation of what the API is returning. It's only needed for TypeScript niceties
-type LoadBalancer = {
-    success: boolean,
-    errors: string[],
-    messages: string[],
-    result: any
+    result: T
 }
 
-class Resource extends AbstractCloudflareResource<ResourceModel, ResourceModel, ResourceModel, ResourceModel, TypeConfigurationModel> {
+// The type below are only partial representation of what the API is returning. It's only needed for TypeScript niceties
+type LoadBalancer = {
+    id: string
+}
+
+class Resource extends AbstractCloudflareResource<ResourceModel, LoadBalancer, LoadBalancer, LoadBalancer, TypeConfigurationModel> {
 
     private userAgent = `AWS CloudFormation (+https://aws.amazon.com/cloudformation/) CloudFormation resource ${this.typeName}/${version}`;
 
-    async get(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<ResourceModel> {
-        if(!model.id) {
+    async get(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<LoadBalancer> {
+        if (!model.id) {
             throw new exceptions.NotFound(this.typeName, null);
         }
 
-        const response = await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<LoadBalancer>(
+        const response = await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<CloudflareResponse<LoadBalancer>>(
             'get',
             `/zones/${model.zoneId}/load_balancers/${model.id}`,
-            null,null, this.loggerProxy);
+            null, null, this.loggerProxy);
 
-        return new ResourceModel(response.data.result);
+        return response.data.result;
     }
 
     async list(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<ResourceModel[]> {
-        const response = await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<LoadBalancers>(
-                'get',
-                `/zones/${model.zoneId}/load_balancers/`,
-                null, null, this.loggerProxy);
-        return response.data.result.map(group => this.setModelFrom(new ResourceModel(model), new ResourceModel(group)));
+        const response = await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<CloudflareResponse<LoadBalancer[]>>(
+            'get',
+            `/zones/${model.zoneId}/load_balancers/`,
+            null, null, this.loggerProxy);
+        return response.data.result.map(loadBalancer => this.setModelFrom(model, loadBalancer));
     }
 
-    async create(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<ResourceModel> {
+    async create(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<LoadBalancer> {
         const body = Transformer.for(model.toJSON())
             .transformKeys(CaseTransformer.PASCAL_TO_SNAKE)
             .transform();
-        const response = await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<LoadBalancer>(
+        const response = await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<CloudflareResponse<LoadBalancer>>(
             'post',
             `/zones/${(model.zoneId)}/load_balancers`,
             {},
             body,
             this.loggerProxy);
 
-        return new ResourceModel(response.data.result);
+        return response.data.result;
     }
 
-    async update(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<ResourceModel> {
+    async update(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<LoadBalancer> {
         let body = Transformer.for(model.toJSON())
             .transformKeys(CaseTransformer.PASCAL_TO_SNAKE)
             .transform();
-        const response = await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<LoadBalancer>(
+        const response = await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<CloudflareResponse<LoadBalancer>>(
             'put',
             `/zones/${model.zoneId}/load_balancers/${model.id}`,
             {},
             body,
             this.loggerProxy);
-        return new ResourceModel(response.data.result);
+        return response.data.result;
     }
 
     async delete(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<void> {
-        await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<LoadBalancer>(
+        await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<CloudflareResponse<LoadBalancer>>(
             'delete',
             `/zones/${model.zoneId}/load_balancers/${model.id}`,
             null,
@@ -86,7 +82,7 @@ class Resource extends AbstractCloudflareResource<ResourceModel, ResourceModel, 
         return new ResourceModel(partial);
     }
 
-    setModelFrom(model: ResourceModel, from: ResourceModel | undefined): ResourceModel {
+    setModelFrom(model: ResourceModel, from?: LoadBalancer): ResourceModel {
         if (!from) {
             return model;
         }

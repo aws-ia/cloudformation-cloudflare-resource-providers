@@ -1,6 +1,6 @@
 {
   "CREATE": {
-    "/ZoneId": "<CLOUDFLARE_ZONE_ID>",
+    "/ZoneId": "0777091bb12ec47977fcc17e08b73a64",
     "/Proxied": true,
     "/Name": "<LOAD_BALANCER_DNS_NAME>",
     "/SessionAffinity": "none",
@@ -20,7 +20,6 @@
     "/Rules": [],
     "/FallbackPool": "<DEFAULT_POOL_ID>",
     "/Enabled": true,
-    "/Description": "",
-    "/Ttl": 30,
+    "/Ttl": 30
   }
 }
