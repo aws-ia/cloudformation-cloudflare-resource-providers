@@ -5,7 +5,7 @@
     "/Name": "<www.example.com>",
     "/Content": "<a.b.c.d>",
     "/Proxied": false,
-    "/Ttl": 1
+    "/Ttl": 600
   },
   "UPDATE": {
     "/ZoneId": "0777091bb12ec47977fcc17e08b73a64",
