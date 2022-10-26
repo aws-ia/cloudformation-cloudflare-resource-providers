@@ -25,7 +25,6 @@
         "Address": "<a.b.c.d>"
       }
     ],
-    "/Name": "Servers",
     "/Description": "Region Pool",
     "/Monitor": "<monitor id>",
     "/Longitude": null,
@@ -57,7 +56,6 @@
         "Address": "<a.b.c.d>"
       }
     ],
-    "/Name": "Servers",
     "/Description": "Servers",
     "/Monitor": "<monitor id>",
     "/Longitude": null,
