@@ -1,6 +1,6 @@
 {
   "CREATE": {
-    "/AccountIdentifier": "a5b4f7b4d7ad87560079512352581a8f",
+    "/AccountIdentifier": "<CLOUDFLARE_ACCOUNT_ID>",
     "/MinimumOrigins": 1,
     "/CheckRegions": [
       "WEU"
@@ -14,7 +14,7 @@
     "/Origins": [
       {
         "Enabled": true,
-        "Address": "<a.b.c.d>",
+        "Address": "<CLOUDFLARE_IP1>",
         "Name": "server-1",
         "Weight": 0.9
       },
@@ -22,16 +22,16 @@
         "Weight": 0.1,
         "Enabled": true,
         "Name": "server-2",
-        "Address": "<a.b.c.d>"
+        "Address": "<CLOUDFLARE_IP2>"
       }
     ],
     "/Description": "Region Pool",
-    "/Monitor": "<monitor id>",
-    "/Longitude": null,
-    "/Latitude": null
+    "/Monitor": "<CLOUDFLARE_MONITOR_ID>",
+    "/Longitude": 38.8976,
+    "/Latitude": -77.0365
   },
   "UPDATE": {
-    "/AccountIdentifier": "a5b4f7b4d7ad87560079512352581a8f",
+    "/AccountIdentifier": "<CLOUDFLARE_ACCOUNT_ID>",
     "/MinimumOrigins": 1,
     "/CheckRegions": [
       "WEU"
@@ -45,7 +45,7 @@
     "/Origins": [
       {
         "Enabled": true,
-        "Address": "<a.b.c.d>",
+        "Address": "<CLOUDFLARE_IP1>",
         "Name": "server-1",
         "Weight": 0.9
       },
@@ -53,12 +53,12 @@
         "Weight": 0.1,
         "Enabled": true,
         "Name": "server-2",
-        "Address": "<a.b.c.d>"
+        "Address": "<CLOUDFLARE_IP2>"
       }
     ],
     "/Description": "Servers",
-    "/Monitor": "<monitor id>",
-    "/Longitude": null,
-    "/Latitude": null
+    "/Monitor": "<CLOUDFLARE_MONITOR_ID>",
+    "/Longitude": 38.8976,
+    "/Latitude": -77.0365
   }
 }
