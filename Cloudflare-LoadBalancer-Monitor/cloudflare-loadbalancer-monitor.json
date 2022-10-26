@@ -1,7 +1,7 @@
 {
     "typeName": "Cloudflare::LoadBalancer::Monitor",
     "description": "A Monitor policy to configure monitoring of endpoint health",
-    "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+    "sourceUrl": "https://github.com/aws-ia/cloudformation-cloudflare-resource-providers",
     "typeConfiguration": {
         "properties": {
             "CloudflareAccess": {
