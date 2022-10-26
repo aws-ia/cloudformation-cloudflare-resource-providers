@@ -1,11 +1,16 @@
 import axios, {AxiosResponse} from "axios";
 import {LoggerProxy} from "@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib/dist/log-delivery";
 
-export type ApiErrorResponse = {
-    message: string,
-    name: string,
-    code: number,
-    status: string
+export type CloudflareResponse<T> = {
+    success: boolean
+    errors: CloudflareError[]
+    messages: string[]
+    result: T
+}
+
+export type CloudflareError = {
+    code: number
+    message: string
 }
 
 export type PaginatedResponseType = {
