@@ -1,17 +1,17 @@
 {
   "CREATE": {
-    "/ZoneId": "0777091bb12ec47977fcc17e08b73a64",
+    "/ZoneId": "<CLOUDFLARE_ZONE_ID>",
     "/Type": "A",
-    "/Name": "<www.example.com>",
-    "/Content": "<a.b.c.d>",
+    "/Name": "<CLOUDFLARE_DOMAIN_NAME>",
+    "/Content": "<CLOUDFLARE_IP1>",
     "/Proxied": false,
-    "/Ttl": 1
+    "/Ttl": 600
   },
   "UPDATE": {
-    "/ZoneId": "0777091bb12ec47977fcc17e08b73a64",
+    "/ZoneId": "<CLOUDFLARE_ZONE_ID>",
     "/Type": "A",
-    "/Name": "<www.example.com>",
-    "/Content": "<a.b.c.d>",
+    "/Name": "<CLOUDFLARE_DOMAIN_NAME>",
+    "/Content": "<CLOUDFLARE_IP2>",
     "/Proxied": false,
     "/Ttl": 1
   }

@@ -1,7 +1,7 @@
 {
     "typeName": "Cloudflare::Dns::Record",
     "description": "A Cloudflare resource for managing a single DNS record",
-    "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+    "sourceUrl": "https://github.com/aws-ia/cloudformation-cloudflare-resource-providers",
     "typeConfiguration": {
         "properties": {
             "CloudflareAccess": {

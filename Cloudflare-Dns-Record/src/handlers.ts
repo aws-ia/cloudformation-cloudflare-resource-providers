@@ -1,91 +1,82 @@
 import {AbstractCloudflareResource} from "../../Cloudflare-Common/src/abstract-cloudflare-resource";
 import {ResourceModel, TypeConfigurationModel} from './models';
-import {CloudflareClient} from "../../Cloudflare-Common/src/cloudflare-client";
+import {
+    CloudflareClient,
+    CloudflarePaginatedResponse,
+    CloudflareResponse
+} from "../../Cloudflare-Common/src/cloudflare-client";
 import {exceptions} from "@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib";
 import {CaseTransformer, Transformer} from "../../Cloudflare-Common/src/util";
 import {version} from "../package.json";
 
-interface CallbackContext extends Record<string, any> {}
-
-type DnsRecords = {
-     success: boolean,
-    errors: string[],
-    messages: string[],
-    result: any[]
-};
 // The type below are only partial representation of what the API is returning. It's only needed for TypeScript niceties
 type DnsRecord = {
-    success: boolean,
-    errors: string[],
-    messages: string[],
-    result: any
+    id: string
 }
 
-class Resource extends AbstractCloudflareResource<ResourceModel, ResourceModel, ResourceModel, ResourceModel, TypeConfigurationModel> {
+class Resource extends AbstractCloudflareResource<ResourceModel, DnsRecord, DnsRecord, DnsRecord, TypeConfigurationModel> {
 
     private userAgent = `AWS CloudFormation (+https://aws.amazon.com/cloudformation/) CloudFormation resource ${this.typeName}/${version}`;
 
-    async get(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<ResourceModel> {
+    async get(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<DnsRecord> {
         let baseUrl = typeConfiguration.cloudflareAccess.url;
         let apiKey = typeConfiguration.cloudflareAccess.apiKey;
 
-        if(!model.id) {
+        if (!model.id) {
             throw new exceptions.AlreadyExists(this.typeName, null);
         }
 
-        const response = await new CloudflareClient(baseUrl, apiKey, this.userAgent).doRequest<DnsRecord>(
-                'get',
-                `/zones/${model.zoneId}/dns_records/${model.id}`,
-                null,null, this.loggerProxy);
+        const response = await new CloudflareClient(baseUrl, apiKey, this.userAgent).doRequest<CloudflareResponse<DnsRecord>>(
+            'get',
+            `/zones/${model.zoneId}/dns_records/${model.id}`);
 
 
-        return new ResourceModel(response.data.result);
+        return response.data.result;
     }
 
     async list(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<ResourceModel[]> {
-        const response = await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<DnsRecords>(
-                'get',
-                `/zones/${model.zoneId}/dns_records/`,
-                null, null, this.loggerProxy);
+        const dnsRecords = await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).paginate<CloudflarePaginatedResponse<DnsRecord[]>, DnsRecord>(
+            'get',
+            `/zones/${model.zoneId}/dns_records/`,
+            response1 => response1.data.result);
 
-        return response.data.result.map(group => this.setModelFrom(new ResourceModel(), new ResourceModel(group)));
+        return dnsRecords.map(dnsRecord => this.setModelFrom(new ResourceModel(), dnsRecord));
     }
 
-    async create(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<ResourceModel> {
-        const response = await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<DnsRecord>(
+    async create(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<DnsRecord> {
+        const response = await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<CloudflareResponse<DnsRecord>>(
             'post',
             `/zones/${(model.zoneId)}/dns_records`,
             {},
-            model.toJSON(),
-            this.loggerProxy);
+            Transformer.for(model.toJSON())
+                .transformKeys(CaseTransformer.PASCAL_TO_SNAKE)
+                .transform());
 
-        return new ResourceModel(response.data.result);
+        return response.data.result;
     }
 
-    async update(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<ResourceModel> {
-        const response = await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<DnsRecord>(
+    async update(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<DnsRecord> {
+        const response = await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<CloudflareResponse<DnsRecord>>(
             'put',
             `/zones/${model.zoneId}/dns_records/${model.id}`,
             {},
-            model.toJSON(),
-            this.loggerProxy);
-        return new ResourceModel(response.data.result);
+            Transformer.for(model.toJSON())
+                .transformKeys(CaseTransformer.PASCAL_TO_SNAKE)
+                .transform());
+        return response.data.result;
     }
 
     async delete(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<void> {
-        await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<DnsRecord>(
+        await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<CloudflareResponse<DnsRecord>>(
             'delete',
-            `/zones/${model.zoneId}/dns_records/${model.id}`,
-            null,
-            null,
-            this.loggerProxy);
+            `/zones/${model.zoneId}/dns_records/${model.id}`);
     }
 
     newModel(partial: any): ResourceModel {
         return new ResourceModel(partial);
     }
 
-    setModelFrom(model: ResourceModel, from: ResourceModel | undefined): ResourceModel {
+    setModelFrom(model: ResourceModel, from?: DnsRecord): ResourceModel {
         if (!from) {
             return model;
         }
@@ -99,7 +90,6 @@ class Resource extends AbstractCloudflareResource<ResourceModel, ResourceModel, 
 
         return resourceModel;
     }
-
 
 }
 

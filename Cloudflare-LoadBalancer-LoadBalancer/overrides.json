@@ -2,7 +2,7 @@
   "CREATE": {
     "/ZoneId": "<CLOUDFLARE_ZONE_ID>",
     "/Proxied": true,
-    "/Name": "<LOAD_BALANCER_DNS_NAME>",
+    "/Name": "<CLOUDFLARE_DOMAIN_NAME>",
     "/SessionAffinity": "none",
     "/SessionAffinityTtl": 82800,
     "/SessionAffinityAttributes": {
@@ -15,12 +15,11 @@
       "DefaultWeight": 1
     },
     "/DefaultPools": [
-      "<DEFAULT_POOL_ID>"
+      "<CLOUDFLARE_POOL_ID>"
     ],
     "/Rules": [],
-    "/FallbackPool": "<DEFAULT_POOL_ID>",
+    "/FallbackPool": "<CLOUDFLARE_POOL_ID>",
     "/Enabled": true,
-    "/Description": "",
-    "/Ttl": 30,
+    "/Ttl": 30
   }
 }

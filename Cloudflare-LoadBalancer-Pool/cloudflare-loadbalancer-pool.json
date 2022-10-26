@@ -1,7 +1,7 @@
 {
     "typeName": "Cloudflare::LoadBalancer::Pool",
     "description": "A resource to manage a pool of origin servers",
-    "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+    "sourceUrl": "https://github.com/aws-ia/cloudformation-cloudflare-resource-providers",
     "typeConfiguration": {
         "properties": {
             "CloudflareAccess": {
@@ -64,7 +64,8 @@
     "properties": {
         "Name": {
             "type": "string",
-            "description": "A short name (tag) for the pool. Only alphanumeric characters, hyphens, and underscores are allowed."
+            "description": "A short name (tag) for the pool. Only alphanumeric characters, hyphens, and underscores are allowed.",
+            "pattern": "^[a-zA-Z0-9\\-\\_]+$"
         },
         "AccountIdentifier": {
             "type": "string",
@@ -136,6 +137,9 @@
         }
     },
     "additionalProperties": false,
+    "tagging": {
+        "taggable": false
+    },
     "required": [
         "Name",
         "Origins"
