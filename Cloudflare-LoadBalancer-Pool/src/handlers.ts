@@ -28,8 +28,7 @@ class Resource extends AbstractCloudflareResource<ResourceModel, LoadBalancerPoo
 
         const response = await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<CloudflareResponse<LoadBalancerPool>>(
             'get',
-            `/accounts/${model.accountIdentifier}/load_balancers/pools/${model.id}`,
-            null,null, this.loggerProxy);
+            `/accounts/${model.accountIdentifier}/load_balancers/pools/${model.id}`);
 
         return response.data.result;
     }
@@ -37,8 +36,7 @@ class Resource extends AbstractCloudflareResource<ResourceModel, LoadBalancerPoo
     async list(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<ResourceModel[]> {
         const response = await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<CloudflareResponse<LoadBalancerPool[]>>(
                 'get',
-                `/accounts/${model.accountIdentifier}/load_balancers/pools`,
-                null, null, this.loggerProxy);
+                `/accounts/${model.accountIdentifier}/load_balancers/pools`);
 
         return response.data.result.map(pool => this.setModelFrom(new ResourceModel({
             accountIdentifier: model.accountIdentifier
@@ -53,8 +51,7 @@ class Resource extends AbstractCloudflareResource<ResourceModel, LoadBalancerPoo
             'post',
             `/accounts/${model.accountIdentifier}/load_balancers/pools/`,
             {},
-            body,
-            this.loggerProxy);
+            body);
 
         return response.data.result;
     }
@@ -68,8 +65,7 @@ class Resource extends AbstractCloudflareResource<ResourceModel, LoadBalancerPoo
             'put',
             `/accounts/${model.accountIdentifier}/load_balancers/pools/${model.id}`,
             {},
-            body,
-            this.loggerProxy);
+            body);
 
         return response.data.result;
     }
@@ -77,10 +73,7 @@ class Resource extends AbstractCloudflareResource<ResourceModel, LoadBalancerPoo
     async delete(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<void> {
         await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<LoadBalancerPool>(
             'delete',
-            `/accounts/${model.accountIdentifier}/load_balancers/pools/${model.id}`,
-            null,
-            null,
-            this.loggerProxy);
+            `/accounts/${model.accountIdentifier}/load_balancers/pools/${model.id}`);
     }
 
     newModel(partial: any): ResourceModel {

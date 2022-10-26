@@ -1,16 +1,9 @@
 import {AbstractCloudflareResource} from "../../Cloudflare-Common/src/abstract-cloudflare-resource";
 import {ResourceModel, TypeConfigurationModel} from './models';
-import {CloudflareClient} from "../../Cloudflare-Common/src/cloudflare-client";
+import {CloudflareClient, CloudflareResponse} from "../../Cloudflare-Common/src/cloudflare-client";
 import {exceptions} from "@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib";
 import {CaseTransformer, Transformer} from "../../Cloudflare-Common/src/util";
 import {version} from "../package.json";
-
-type CloudflareResponse<T> = {
-    success: boolean,
-    errors: string[],
-    messages: string[],
-    result: T
-}
 
 // The type below are only partial representation of what the API is returning. It's only needed for TypeScript niceties
 type LoadBalancerMonitor = {
@@ -28,8 +21,7 @@ class Resource extends AbstractCloudflareResource<ResourceModel, LoadBalancerMon
 
         const response = await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<CloudflareResponse<LoadBalancerMonitor>>(
             'get',
-            `/accounts/${model.accountIdentifier}/load_balancers/monitors/${model.id}`,
-            null, null, this.loggerProxy);
+            `/accounts/${model.accountIdentifier}/load_balancers/monitors/${model.id}`);
 
         return response.data.result;
     }
@@ -37,8 +29,7 @@ class Resource extends AbstractCloudflareResource<ResourceModel, LoadBalancerMon
     async list(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<ResourceModel[]> {
         const response = await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<CloudflareResponse<LoadBalancerMonitor[]>>(
             'get',
-            `/accounts/${model.accountIdentifier}/load_balancers/monitors/`,
-            null, null, this.loggerProxy);
+            `/accounts/${model.accountIdentifier}/load_balancers/monitors/`);
 
         return response.data.result.map(monitor => this.setModelFrom(new ResourceModel({
             accountIdentifier: model.accountIdentifier
@@ -56,8 +47,7 @@ class Resource extends AbstractCloudflareResource<ResourceModel, LoadBalancerMon
             'post',
             `/accounts/${accountIdentifier}/load_balancers/monitors`,
             {},
-            body,
-            this.loggerProxy);
+            body);
 
         return response.data.result;
     }
@@ -71,18 +61,14 @@ class Resource extends AbstractCloudflareResource<ResourceModel, LoadBalancerMon
             'put',
             `/accounts/${model.accountIdentifier}/load_balancers/monitors/${model.id}`,
             {},
-            body,
-            this.loggerProxy);
+            body);
         return response.data.result;
     }
 
     async delete(model: ResourceModel, typeConfiguration: TypeConfigurationModel): Promise<void> {
         await new CloudflareClient(typeConfiguration.cloudflareAccess.url, typeConfiguration.cloudflareAccess.apiKey, this.userAgent).doRequest<CloudflareResponse<LoadBalancerMonitor>>(
             'delete',
-            `/accounts/${model.accountIdentifier}/load_balancers/monitors/${model.id}`,
-            null,
-            null,
-            this.loggerProxy);
+            `/accounts/${model.accountIdentifier}/load_balancers/monitors/${model.id}`);
     }
 
     newModel(partial: any): ResourceModel {
