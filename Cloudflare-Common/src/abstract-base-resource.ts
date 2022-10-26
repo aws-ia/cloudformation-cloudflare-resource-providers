@@ -11,13 +11,13 @@ import {
     ResourceHandlerRequest,
     SessionProxy
 } from "@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib";
-    import {NotFound} from "@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib/dist/exceptions";
+import {NotFound} from "@amazon-web-services-cloudformation/cloudformation-cli-typescript-lib/dist/exceptions";
 
 export interface RetryableCallbackContext {
     retry?: number
 }
 
-export abstract class AbstractBasedResource<ResourceModelType extends BaseModel, GetResponseData, CreateResponseData, UpdateResponseData, ErrorType extends Error, TypeConfigurationModel> extends BaseResource<ResourceModelType> {
+export abstract class AbstractBaseResource<ResourceModelType extends BaseModel, GetResponseData, CreateResponseData, UpdateResponseData, ErrorType, TypeConfigurationType> extends BaseResource<ResourceModelType> {
 
     private maxRetries = 5;
 
@@ -26,41 +26,47 @@ export abstract class AbstractBasedResource<ResourceModelType extends BaseModel,
      * Typically, this uses the primary identifier to perform an REST API request.
      *
      * @param model Current model coming from CloudFormation. This contains the input given by the user as well as any
+     * @param typeConfiguration The type configuration for the resource. This can be null
      * output already set by previous handler which returned an IN_PROGRESS event.
      */
-    abstract get(model: ResourceModelType, typeConfiguration: TypeConfigurationModel): Promise<GetResponseData>;
+    abstract get(model: ResourceModelType, typeConfiguration?: TypeConfigurationType): Promise<GetResponseData>;
 
     /**
      * This method is invoked to list all possible resources from a vendor API, of the current resource type.
      *
      * @param model Current model coming from CloudFormation. This contains the input given by the user as well as any
+     * @param typeConfiguration The type configuration for the resource. This can be null
      * output already set by previous handler which returned an IN_PROGRESS event.
      */
-    abstract list(model: ResourceModelType, typeConfiguration: TypeConfigurationModel): Promise<ResourceModelType[]>;
+    abstract list(model: ResourceModelType, typeConfiguration?: TypeConfigurationType): Promise<ResourceModelType[]>;
 
     /**
      * This method is invoked to create a resource from a vendor API, that should correspond to the given the CloudFormation model input.
      *
      * @param model Current model coming from CloudFormation. This contains the input given by the user as well as any
+     * @param typeConfiguration The type configuration for the resource. This can be null
      * output already set by previous handler which returned an IN_PROGRESS event.
+     * @param typeConfiguration
      */
-    abstract create(model: ResourceModelType, typeConfiguration: TypeConfigurationModel): Promise<CreateResponseData>;
+    abstract create(model: ResourceModelType, typeConfiguration?: TypeConfigurationType): Promise<CreateResponseData>;
 
     /**
      * This method is invoked to update a resource from a vendor API, that should correspond to the given the CloudFormation model input.
      *
      * @param model Current model coming from CloudFormation. This contains the input given by the user as well as any
+     * @param typeConfiguration The type configuration for the resource. This can be null
      * output already set by previous handler which returned an IN_PROGRESS event.
      */
-    abstract update(model: ResourceModelType, typeConfiguration: TypeConfigurationModel): Promise<UpdateResponseData>;
+    abstract update(model: ResourceModelType, typeConfiguration?: TypeConfigurationType): Promise<UpdateResponseData>;
 
     /**
      * This method is invoked to delete a resource from a vendor API, that should correspond to the given the CloudFormation model input.
      *
      * @param model Current model coming from CloudFormation. This contains the input given by the user as well as any
+     * @param typeConfiguration The type configuration for the resource. This can be null
      * output already set by previous handler which returned an IN_PROGRESS event.
      */
-    abstract delete(model: ResourceModelType, typeConfiguration: TypeConfigurationModel): Promise<void>;
+    abstract delete(model: ResourceModelType, typeConfiguration?: TypeConfigurationType): Promise<void>;
 
     /**
      * This method is invoked to instantiate a new resource model
@@ -98,6 +104,7 @@ export abstract class AbstractBasedResource<ResourceModelType extends BaseModel,
      * @param callbackContext Custom context object to allow the passing through of additional
      * state or metadata between subsequent retries
      * @param logger Logger to proxy requests to default publishers
+     * @param typeConfiguration The resource configuration data
      */
     @handlerEvent(Action.Create)
     public async createHandler(
@@ -105,25 +112,37 @@ export abstract class AbstractBasedResource<ResourceModelType extends BaseModel,
         request: ResourceHandlerRequest<ResourceModelType>,
         callbackContext: RetryableCallbackContext,
         logger: LoggerProxy,
-        typeConfiguration: TypeConfigurationModel
+        typeConfiguration: TypeConfigurationType
     ): Promise<ProgressEvent<ResourceModelType, RetryableCallbackContext>> {
         let model = this.newModel(request.desiredResourceState);
+
         if (!callbackContext.retry) {
             if (await this.assertExists(model, typeConfiguration)) {
                 throw new exceptions.AlreadyExists(this.typeName, request.logicalResourceIdentifier);
             }
+
             try {
                 let data = await this.create(model, typeConfiguration);
                 model = this.setModelFrom(model, data);
-                return ProgressEvent.progress<ProgressEvent<ResourceModelType, RetryableCallbackContext>>(model, {
-                    retry: 1
-                });
+                const retry = 1;
+                const maxDelay = Math.pow(2, retry) * Math.random();
+                return ProgressEvent.builder<ProgressEvent<ResourceModelType, RetryableCallbackContext>>()
+                    .status(OperationStatus.InProgress)
+                    .resourceModel(model)
+                    .callbackContext({
+                        retry: retry
+                    })
+                    .callbackDelaySeconds(maxDelay * Math.random())
+                    .build();
             } catch (e) {
+                logger.log(`Error ${e}`);
                 this.processRequestException(e, request);
             }
         }
+
         try {
             const data = await this.get(model, typeConfiguration);
+
             model = this.setModelFrom(model, data);
             return ProgressEvent.success<ProgressEvent<ResourceModelType, RetryableCallbackContext>>(model);
         } catch (e) {
@@ -131,10 +150,16 @@ export abstract class AbstractBasedResource<ResourceModelType extends BaseModel,
                 this.processRequestException(e, request);
             } catch (e) {
                 if (e instanceof NotFound) {
-                    if (callbackContext.retry < this.maxRetries) {
-                        return ProgressEvent.progress<ProgressEvent<ResourceModelType, RetryableCallbackContext>>(model, {
-                            retry: callbackContext.retry + 1
-                        });
+                    if (callbackContext.retry <= this.maxRetries) {
+                        const maxDelay = Math.pow(2, callbackContext.retry) * Math.random();
+                        return ProgressEvent.builder<ProgressEvent<ResourceModelType, RetryableCallbackContext>>()
+                            .status(OperationStatus.InProgress)
+                            .resourceModel(model)
+                            .callbackContext({
+                                retry: callbackContext.retry + 1
+                            })
+                            .callbackDelaySeconds(maxDelay * Math.random())
+                            .build();
                     } else {
                         throw new exceptions.NotStabilized(`Resource failed to stabilized after ${this.maxRetries} retries`);
                     }
@@ -153,6 +178,7 @@ export abstract class AbstractBasedResource<ResourceModelType extends BaseModel,
      * @param callbackContext Custom context object to allow the passing through of additional
      * state or metadata between subsequent retries
      * @param logger Logger to proxy requests to default publishers
+     * @param typeConfiguration The resource configuration data
      */
     @handlerEvent(Action.Update)
     public async updateHandler(
@@ -160,7 +186,7 @@ export abstract class AbstractBasedResource<ResourceModelType extends BaseModel,
         request: ResourceHandlerRequest<ResourceModelType>,
         callbackContext: RetryableCallbackContext,
         logger: LoggerProxy,
-        typeConfiguration: TypeConfigurationModel
+        typeConfiguration: TypeConfigurationType
     ): Promise<ProgressEvent<ResourceModelType, RetryableCallbackContext>> {
         let model = this.newModel(request.desiredResourceState);
 
@@ -189,6 +215,7 @@ export abstract class AbstractBasedResource<ResourceModelType extends BaseModel,
      * @param callbackContext Custom context object to allow the passing through of additional
      * state or metadata between subsequent retries
      * @param logger Logger to proxy requests to default publishers
+     * @param typeConfiguration The resource configuration data
      */
     @handlerEvent(Action.Delete)
     public async deleteHandler(
@@ -196,9 +223,10 @@ export abstract class AbstractBasedResource<ResourceModelType extends BaseModel,
         request: ResourceHandlerRequest<ResourceModelType>,
         callbackContext: RetryableCallbackContext,
         logger: LoggerProxy,
-        typeConfiguration: TypeConfigurationModel
+        typeConfiguration: TypeConfigurationType
     ): Promise<ProgressEvent<ResourceModelType, RetryableCallbackContext>> {
         let model = this.newModel(request.desiredResourceState);
+
         if (!callbackContext.retry) {
             if (!(await this.assertExists(model, typeConfiguration))) {
                 throw new exceptions.NotFound(this.typeName, request.logicalResourceIdentifier);
@@ -206,9 +234,16 @@ export abstract class AbstractBasedResource<ResourceModelType extends BaseModel,
 
             try {
                 await this.delete(model, typeConfiguration)
-                return ProgressEvent.progress<ProgressEvent<ResourceModelType, RetryableCallbackContext>>(model, {
-                    retry: 1
-                });
+                const retry = 1;
+                const maxDelay = Math.pow(2, retry) * Math.random();
+                return ProgressEvent.builder<ProgressEvent<ResourceModelType, RetryableCallbackContext>>()
+                    .status(OperationStatus.InProgress)
+                    .resourceModel(model)
+                    .callbackContext({
+                        retry: retry
+                    })
+                    .callbackDelaySeconds(maxDelay * Math.random())
+                    .build();
             } catch (e) {
                 this.processRequestException(e, request);
             }
@@ -217,23 +252,26 @@ export abstract class AbstractBasedResource<ResourceModelType extends BaseModel,
         try {
             await this.get(model, typeConfiguration);
         } catch (e) {
-            if (e instanceof NotFound) {
-                return ProgressEvent.success<ProgressEvent<ResourceModelType, RetryableCallbackContext>>();
-            }
             try {
                 this.processRequestException(e, request);
-            } catch (e2) {
-                if (e2 instanceof NotFound) {
+            } catch (e) {
+                if (e instanceof NotFound) {
                     return ProgressEvent.success<ProgressEvent<ResourceModelType, RetryableCallbackContext>>();
                 }
-                throw e2;
+                throw e;
             }
         }
 
-        if (callbackContext.retry < this.maxRetries) {
-            return ProgressEvent.progress<ProgressEvent<ResourceModelType, RetryableCallbackContext>>(model, {
-                retry: callbackContext.retry + 1
-            });
+        if (callbackContext.retry <= this.maxRetries) {
+            const maxDelay = Math.pow(2, callbackContext.retry) * Math.random();
+            return ProgressEvent.builder<ProgressEvent<ResourceModelType, RetryableCallbackContext>>()
+                .status(OperationStatus.InProgress)
+                .resourceModel(model)
+                .callbackContext({
+                    retry: callbackContext.retry + 1
+                })
+                .callbackDelaySeconds(maxDelay * Math.random())
+                .build();
         } else {
             throw new exceptions.NotStabilized(`Resource failed to stabilized after ${this.maxRetries} retries`);
         }
@@ -248,6 +286,7 @@ export abstract class AbstractBasedResource<ResourceModelType extends BaseModel,
      * @param callbackContext Custom context object to allow the passing through of additional
      * state or metadata between subsequent retries
      * @param logger Logger to proxy requests to default publishers
+     * @param typeConfiguration The resource configuration data
      */
     @handlerEvent(Action.Read)
     public async readHandler(
@@ -255,7 +294,7 @@ export abstract class AbstractBasedResource<ResourceModelType extends BaseModel,
         request: ResourceHandlerRequest<ResourceModelType>,
         callbackContext: RetryableCallbackContext,
         logger: LoggerProxy,
-        typeConfiguration: TypeConfigurationModel
+        typeConfiguration: TypeConfigurationType
     ): Promise<ProgressEvent<ResourceModelType, RetryableCallbackContext>> {
         let model = this.newModel(request.desiredResourceState);
 
@@ -278,6 +317,7 @@ export abstract class AbstractBasedResource<ResourceModelType extends BaseModel,
      * @param callbackContext Custom context object to allow the passing through of additional
      * state or metadata between subsequent retries
      * @param logger Logger to proxy requests to default publishers
+     * @param typeConfiguration The resource configuration data
      */
     @handlerEvent(Action.List)
     public async listHandler(
@@ -285,7 +325,7 @@ export abstract class AbstractBasedResource<ResourceModelType extends BaseModel,
         request: ResourceHandlerRequest<ResourceModelType>,
         callbackContext: RetryableCallbackContext,
         logger: LoggerProxy,
-        typeConfiguration: TypeConfigurationModel
+        typeConfiguration: TypeConfigurationType
     ): Promise<ProgressEvent<ResourceModelType, RetryableCallbackContext>> {
         const model = this.newModel(request.desiredResourceState);
 
@@ -297,14 +337,11 @@ export abstract class AbstractBasedResource<ResourceModelType extends BaseModel,
                 .resourceModels(data)
                 .build();
         } catch (e) {
-            if (e instanceof NotFound) {
-                throw e;
-            }
             this.processRequestException(e, request);
         }
     }
 
-    private async assertExists(model: ResourceModelType, typeConfiguration: TypeConfigurationModel) {
+    private async assertExists(model: ResourceModelType, typeConfiguration: TypeConfigurationType) {
         try {
             await this.get(model, typeConfiguration);
         } catch (e) {
