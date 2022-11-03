@@ -1,0 +1,8 @@
+{
+  "ZoneId": "doesNotExist",
+  "Type": "DOES_NOT_EXIST",
+  "Name": "acme.me",
+  "Content": "1.1.1.1",
+  "Proxied": false,
+  "Ttl": 600
+}
