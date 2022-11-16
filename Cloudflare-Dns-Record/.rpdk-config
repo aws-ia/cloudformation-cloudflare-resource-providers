@@ -17,5 +17,16 @@
         "target_schemas": [],
         "useDocker": false,
         "protocolVersion": "2.0.0"
+    },
+    "contractSettings": {
+        "typeConfiguration": {
+            "configuration": {
+                "CloudflareAccess": {
+                    "Url": "{{resolve:ssm-secure:/cfn/cloudflare/url:1}}",
+                    "ApiKey": "{{resolve:ssm-secure:/cfn/cloudflare/apiToken:1}}"
+                }
+            },
+            "configurationAlias": "default"
+        }
     }
 }

@@ -1,1 +1,3 @@
 */overrides.json filter=cloudflare
+
+**/inputs/*.json filter=cloudflare
