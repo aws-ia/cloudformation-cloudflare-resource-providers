@@ -163,12 +163,12 @@ export class ResourceModel extends BaseModel {
     @Expose({ name: 'Rules' })
     @Transform(
         (value: any, obj: any) =>
-            transformValue(String, 'rules', value, obj, [Array]),
+            transformValue(Object, 'rules', value, obj, [Array, Map]),
         {
             toClassOnly: true,
         }
     )
-    rules?: Optional<Array<string>>;
+    rules?: Optional<Array<Map<string, object>>>;
     @Expose({ name: 'ModifiedOn' })
     @Transform(
         (value: any, obj: any) =>
@@ -178,6 +178,15 @@ export class ResourceModel extends BaseModel {
         }
     )
     modifiedOn?: Optional<string>;
+    @Expose({ name: 'CreatedOn' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'createdOn', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    createdOn?: Optional<string>;
 
     @Exclude()
     public getPrimaryIdentifier(): Dict {

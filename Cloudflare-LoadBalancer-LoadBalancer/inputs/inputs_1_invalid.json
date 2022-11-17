@@ -1,0 +1,23 @@
+{
+    "ZoneId": "idDoesNotExist",
+    "Proxied": true,
+    "Name": "acme.com",
+    "SessionAffinity": "none",
+    "SessionAffinityTtl": 79200,
+    "SessionAffinityAttributes": {
+      "ZeroDowntimeFailover": "none"
+    },
+    "SteeringPolicy": "off",
+    "RegionPools": {},
+    "CountryPools": {},
+    "RandomSteering": {
+      "DefaultWeight": 1
+    },
+    "DefaultPools": [
+      "idDoesNotExist"
+    ],
+    "Rules": [],
+    "FallbackPool": "idDoesNotExist",
+    "Enabled": true,
+    "Ttl": 500
+  }

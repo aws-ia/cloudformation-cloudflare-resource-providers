@@ -79,7 +79,9 @@ class Resource extends AbstractCloudflareResource<ResourceModel, LoadBalancer, L
                 .forModelIngestion()
                 .transform()
         });
-
+        // Delete a couple of unused fields that are returned by the API
+        delete (<any>resourceModel)?.adaptiveRouting;
+        delete (<any>resourceModel)?.locationStrategy;
         delete resourceModel.sessionAffinityAttributes;
 
         return resourceModel;

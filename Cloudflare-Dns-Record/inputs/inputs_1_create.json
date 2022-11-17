@@ -1,8 +1,8 @@
 {
-    "ZoneId": "<CLOUDFLARE_ZONE_ID>",
+    "ZoneId": "0777091bb12ec47977fcc17e08b73a64",
     "Type": "A",
-    "Name": "<CLOUDFLARE_DOMAIN_NAME>",
-    "Content": ":<CLOUDFLARE_IP1>",
+    "Name": "example.apptagger.com",
+    "Content": "62.116.130.2",
     "Proxied": false,
     "Ttl": 600
   }

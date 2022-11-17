@@ -111,12 +111,16 @@
             "type": "array",
             "insertionOrder": false,
             "items": {
-                "type": "string"
+                "type": "object"
             }
         },
         "ModifiedOn": {
             "type": "string",
             "description": "When the record was last modified"
+        },
+        "CreatedOn": {
+            "type": "string",
+            "description": "When the record was created"
         }
     },
     "additionalProperties": false,
@@ -128,7 +132,8 @@
     ],
     "readOnlyProperties": [
         "/properties/Id",
-        "/properties/ModifiedOn"
+        "/properties/ModifiedOn",
+        "/properties/CreatedOn"
     ],
     "primaryIdentifier": [
         "/properties/Id",
