@@ -63,10 +63,6 @@
             "type": "boolean",
             "description": "Whether this record can be modified/deleted (true means it's managed by Cloudflare)"
         },
-        "Data": {
-            "type": "object",
-            "description": "Metadata about the record"
-        },
         "Name": {
             "type": "string",
             "description": "DNS record name (or @ for the zone apex)"

@@ -49,15 +49,6 @@ export class ResourceModel extends BaseModel {
         }
     )
     locked?: Optional<boolean>;
-    @Expose({ name: 'Data' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Object, 'data', value, obj, [Map]),
-        {
-            toClassOnly: true,
-        }
-    )
-    data?: Optional<Map<string, object>>;
     @Expose({ name: 'Name' })
     @Transform(
         (value: any, obj: any) =>

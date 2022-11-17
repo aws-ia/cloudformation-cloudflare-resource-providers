@@ -2,7 +2,7 @@
     "ZoneId": "<CLOUDFLARE_ZONE_ID>",
     "Type": "A",
     "Name": "<CLOUDFLARE_DOMAIN_NAME>",
-    "Content": ":<CLOUDFLARE_IP1>",
+    "Content": ":<CLOUDFLARE_IP2>",
     "Proxied": false,
     "Ttl": 1
   }
