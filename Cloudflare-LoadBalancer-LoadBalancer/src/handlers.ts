@@ -7,7 +7,8 @@ import {version} from "../package.json";
 
 // The type below are only partial representation of what the API is returning. It's only needed for TypeScript niceties
 type LoadBalancer = {
-    id: string
+    id: string,
+    countryPools: any,
 }
 
 class Resource extends AbstractCloudflareResource<ResourceModel, LoadBalancer, LoadBalancer, LoadBalancer, TypeConfigurationModel> {
@@ -72,12 +73,15 @@ class Resource extends AbstractCloudflareResource<ResourceModel, LoadBalancer, L
         if (!from) {
             return model;
         }
+
+	const countryPools = from.countryPools ? from.countryPools : {};
         let resourceModel = new ResourceModel({
             ...model,
             ...Transformer.for(from)
                 .transformKeys(CaseTransformer.SNAKE_TO_CAMEL)
                 .forModelIngestion()
-                .transform()
+                .transform(),
+	     countryPools
         });
         // Delete a couple of unused fields that are returned by the API
         delete (<any>resourceModel)?.adaptiveRouting;

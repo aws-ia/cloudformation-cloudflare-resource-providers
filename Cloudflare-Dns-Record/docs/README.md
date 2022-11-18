@@ -14,7 +14,6 @@ To declare this entity in your AWS CloudFormation template, use the following sy
     "Properties" : {
         "<a href="#type" title="Type">Type</a>" : <i>String</i>,
         "<a href="#meta" title="Meta">Meta</a>" : <i>Map</i>,
-        "<a href="#data" title="Data">Data</a>" : <i>Map</i>,
         "<a href="#name" title="Name">Name</a>" : <i>String</i>,
         "<a href="#ttl" title="Ttl">Ttl</a>" : <i>Double</i>,
         "<a href="#zoneid" title="ZoneId">ZoneId</a>" : <i>String</i>,
@@ -31,7 +30,6 @@ Type: Cloudflare::Dns::Record
 Properties:
     <a href="#type" title="Type">Type</a>: <i>String</i>
     <a href="#meta" title="Meta">Meta</a>: <i>Map</i>
-    <a href="#data" title="Data">Data</a>: <i>Map</i>
     <a href="#name" title="Name">Name</a>: <i>String</i>
     <a href="#ttl" title="Ttl">Ttl</a>: <i>Double</i>
     <a href="#zoneid" title="ZoneId">ZoneId</a>: <i>String</i>
@@ -56,16 +54,6 @@ _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormati
 #### Meta
 
 Extra Cloudflare-specific information about the record
-
-_Required_: No
-
-_Type_: Map
-
-_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
-
-#### Data
-
-Metadata about the record
 
 _Required_: No
 

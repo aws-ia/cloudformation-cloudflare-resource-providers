@@ -3,7 +3,7 @@
   "Proxied": true,
   "Name": "<CLOUDFLARE_DOMAIN_NAME>",
   "SessionAffinity": "none",
-  "SessionAffinityTtl": 79200,
+  "SessionAffinityTtl": 82800,
   "SessionAffinityAttributes": {
     "ZeroDowntimeFailover": "none"
   },
@@ -19,5 +19,5 @@
   "Rules": [],
   "FallbackPool": "<CLOUDFLARE_POOL_ID>",
   "Enabled": true,
-  "Ttl": 500
+  "Ttl": 60
 }
