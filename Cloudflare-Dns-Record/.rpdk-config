@@ -18,7 +18,7 @@
         "useDocker": false,
         "protocolVersion": "2.0.0"
     },
-    "contractSettings": {
+    "contractSettings":{
         "typeConfiguration": {
             "configuration": {
                 "CloudflareAccess": {

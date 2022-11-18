@@ -1,33 +1,23 @@
 {
-    "ZoneId": "<CLOUDFLARE_ZONE_ID>",
-    "Proxied": false,
-    "Name": "<CLOUDFLARE_DOMAIN_NAME>",
-    "SessionAffinity": "none",
-    "SessionAffinityAttributes": {
-      "ZeroDowntimeFailover": "none",
-      "Semesite": "Auto",
-      "DrainDuration": 0,
-      "Secure": "Auto"
-    },
-    "SteeringPolicy": "off",
-    "RandomSteering": {
-      "DefaultWeight": 1
-    },
-    "DefaultPools": [
-      "<CLOUDFLARE_POOL_ID>"
-    ],
-    "FallbackPool": "<CLOUDFLARE_POOL_ID>",
-    "Enabled": true,
-    "Rules": [
-      {
-        "Name": "example rule",
-        "Overrides": {
-          "Ttl": 300,
-          "Condition": "",
-          "Disabled": false,
-          "Priority": 0
-        }
-      }
-    ],
-    "Ttl": 500
-  }
+  "ZoneId": "<CLOUDFLARE_ZONE_ID>",
+  "Proxied": true,
+  "Name": "<CLOUDFLARE_DOMAIN_NAME>",
+  "SessionAffinity": "none",
+  "SessionAffinityTtl": 79200,
+  "SessionAffinityAttributes": {
+    "ZeroDowntimeFailover": "none"
+  },
+  "SteeringPolicy": "off",
+  "RegionPools": {},
+  "CountryPools": {},
+  "RandomSteering": {
+    "DefaultWeight": 1
+  },
+  "DefaultPools": [
+    "<CLOUDFLARE_POOL_ID>"
+  ],
+  "Rules": [],
+  "FallbackPool": "<CLOUDFLARE_POOL_ID>",
+  "Enabled": true,
+  "Ttl": 500
+}
