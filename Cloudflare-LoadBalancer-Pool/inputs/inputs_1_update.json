@@ -1,0 +1,32 @@
+{
+    "AccountIdentifier": "<CLOUDFLARE_ACCOUNT_ID>",
+    "Name": "CTv2UpdatedName",
+    "MinimumOrigins": 1,
+    "CheckRegions": [
+        "WEU"
+    ],
+    "NotificationEmail": "email@example.com",
+    "NotificationFilter": {
+        "Pool": {
+            "Healthy": false
+        }
+    },
+    "Origins": [
+        {
+            "Enabled": true,
+            "Address": "<CLOUDFLARE_IP1>",
+            "Name": "server-1",
+            "Weight": 0.9
+        },
+        {
+            "Weight": 0.1,
+            "Enabled": true,
+            "Name": "server-2",
+            "Address": "<CLOUDFLARE_IP2>"
+        }
+    ],
+    "Description": "Servers",
+    "Monitor": "<CLOUDFLARE_MONITOR_ID>",
+    "Longitude": 38.8976,
+    "Latitude": -77.0365
+}

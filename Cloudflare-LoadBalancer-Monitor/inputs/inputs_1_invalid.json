@@ -1,0 +1,17 @@
+{
+  "ExpectedBody": "",
+  "ExpectedCodes": "200",
+  "Method": "GET",
+  "Timeout": 5,
+  "Path": "/",
+  "Interval": 60,
+  "Retries": 2,
+  "Description": "GET over HTTPS - expect 200",
+  "Type": "http",
+  "Port": 80,
+  "AccountIdentifier": "doesNotExist",
+  "FollowRedirects": false,
+  "AllowInsecure": false,
+  "ProbeZone": "",
+  "Header": {}
+}

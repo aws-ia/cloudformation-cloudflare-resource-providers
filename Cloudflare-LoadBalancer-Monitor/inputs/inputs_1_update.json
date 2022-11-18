@@ -1,0 +1,16 @@
+{
+  "ExpectedBody": "",
+  "ExpectedCodes": "200",
+  "Method": "GET",
+  "Timeout": 5,
+  "Path": "/",
+  "Interval": 60,
+  "Retries": 2,
+  "Description": "Some Other Description",
+  "Type": "http",
+  "Port": 80,
+  "AccountIdentifier": "<CLOUDFLARE_ACCOUNT_ID>",
+  "FollowRedirects": false,
+  "AllowInsecure": false,
+  "ProbeZone": ""
+}

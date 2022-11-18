@@ -1,0 +1,23 @@
+{
+  "ZoneId": "<CLOUDFLARE_ZONE_ID>",
+  "Proxied": true,
+  "Name": "<CLOUDFLARE_DOMAIN_NAME>",
+  "SessionAffinity": "none",
+  "SessionAffinityTtl": 79200,
+  "SessionAffinityAttributes": {
+    "ZeroDowntimeFailover": "none"
+  },
+  "SteeringPolicy": "off",
+  "RegionPools": {},
+  "CountryPools": {},
+  "RandomSteering": {
+    "DefaultWeight": 1
+  },
+  "DefaultPools": [
+    "<CLOUDFLARE_POOL_ID>"
+  ],
+  "Rules": [],
+  "FallbackPool": "<CLOUDFLARE_POOL_ID>",
+  "Enabled": true,
+  "Ttl": 500
+}
