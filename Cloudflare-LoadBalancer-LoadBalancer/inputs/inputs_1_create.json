@@ -1,8 +1,8 @@
 {
   "ZoneId": "<CLOUDFLARE_ZONE_ID>",
-  "Proxied": true,
+  "Proxied": false,
   "Name": "<CLOUDFLARE_DOMAIN_NAME>",
-  "SessionAffinity": "none",
+  "SessionAffinity": "cookie",
   "SessionAffinityTtl": 82800,
   "SessionAffinityAttributes": {
     "ZeroDowntimeFailover": "none"
@@ -16,7 +16,14 @@
   "DefaultPools": [
     "<CLOUDFLARE_POOL_ID>"
   ],
-  "Rules": [],
+  "Rules": [{
+    "name": "CustomRule1",
+    "priority": 0,
+    "disabled": false,
+    "condition": "(http.request.uri eq \" /content?page=1234\")",
+    "overrides": {},
+    "terminates": true
+  }],
   "FallbackPool": "<CLOUDFLARE_POOL_ID>",
   "Enabled": true,
   "Ttl": 30

@@ -28,7 +28,7 @@ To declare this entity in your AWS CloudFormation template, use the following sy
         "<a href="#sessionaffinity" title="SessionAffinity">SessionAffinity</a>" : <i>String</i>,
         "<a href="#sessionaffinityttl" title="SessionAffinityTtl">SessionAffinityTtl</a>" : <i>Double</i>,
         "<a href="#sessionaffinityattributes" title="SessionAffinityAttributes">SessionAffinityAttributes</a>" : <i>Map</i>,
-        "<a href="#rules" title="Rules">Rules</a>" : <i>[ String, ... ]</i>,
+        "<a href="#rules" title="Rules">Rules</a>" : <i>[ Map, ... ]</i>,
     }
 }
 </pre>
@@ -56,7 +56,7 @@ Properties:
     <a href="#sessionaffinityttl" title="SessionAffinityTtl">SessionAffinityTtl</a>: <i>Double</i>
     <a href="#sessionaffinityattributes" title="SessionAffinityAttributes">SessionAffinityAttributes</a>: <i>Map</i>
     <a href="#rules" title="Rules">Rules</a>: <i>
-      - String</i>
+      - Map</i>
 </pre>
 
 ## Properties
@@ -227,7 +227,7 @@ A list of conditions and overrides for each load balancer operation
 
 _Required_: No
 
-_Type_: List of String
+_Type_: List of Map
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
@@ -246,4 +246,8 @@ ID of the load balancer
 #### ModifiedOn
 
 When the record was last modified
+
+#### CreatedOn
+
+When the record was created
 
