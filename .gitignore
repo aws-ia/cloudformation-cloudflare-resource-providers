@@ -2,3 +2,4 @@
 rpdk.log
 node_modules
 dist
+*.zip
