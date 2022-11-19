@@ -92,14 +92,8 @@ export class ResourceModel extends BaseModel {
     )
     longitude?: Optional<number>;
     @Expose({ name: 'LoadShedding' })
-    @Transform(
-        (value: any, obj: any) =>
-            transformValue(Object, 'loadShedding', value, obj, [Map]),
-        {
-            toClassOnly: true,
-        }
-    )
-    loadShedding?: Optional<Map<string, object>>;
+    @Type(() => LoadShedding)
+    loadShedding?: Optional<LoadShedding>;
     @Expose({ name: 'MinimumOrigins' })
     @Transform(
         (value: any, obj: any) =>
@@ -128,14 +122,17 @@ export class ResourceModel extends BaseModel {
     )
     notificationEmail?: Optional<string>;
     @Expose({ name: 'OriginSteering' })
+    @Type(() => OriginSteering)
+    originSteering?: Optional<OriginSteering>;
+    @Expose({ name: 'CreatedOn' })
     @Transform(
         (value: any, obj: any) =>
-            transformValue(Object, 'originSteering', value, obj, [Map]),
+            transformValue(String, 'createdOn', value, obj, []),
         {
             toClassOnly: true,
         }
     )
-    originSteering?: Optional<Map<string, object>>;
+    createdOn?: Optional<string>;
     @Expose({ name: 'ModifiedOn' })
     @Transform(
         (value: any, obj: any) =>
@@ -235,6 +232,65 @@ export class Pool extends BaseModel {
         }
     )
     healthy?: Optional<boolean>;
+
+}
+
+export class LoadShedding extends BaseModel {
+    ['constructor']: typeof LoadShedding;
+
+
+    @Expose({ name: 'DefaultPercent' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(Integer, 'defaultPercent', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    defaultPercent?: Optional<integer>;
+    @Expose({ name: 'DefaultPolicy' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'defaultPolicy', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    defaultPolicy?: Optional<string>;
+    @Expose({ name: 'SessionPercent' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(Integer, 'sessionPercent', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    sessionPercent?: Optional<integer>;
+    @Expose({ name: 'SessionPolicy' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'sessionPolicy', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    sessionPolicy?: Optional<string>;
+
+}
+
+export class OriginSteering extends BaseModel {
+    ['constructor']: typeof OriginSteering;
+
+
+    @Expose({ name: 'Policy' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'policy', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    policy?: Optional<string>;
 
 }
 
