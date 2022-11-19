@@ -97,12 +97,12 @@ export class ResourceModel extends BaseModel {
     @Expose({ name: 'Header' })
     @Transform(
         (value: any, obj: any) =>
-            transformValue(String, 'header', value, obj, []),
+            transformValue(Object, 'header', value, obj, [Map]),
         {
             toClassOnly: true,
         }
     )
-    header?: Optional<string>;
+    header?: Optional<Map<string, object>>;
     @Expose({ name: 'Type' })
     @Transform(
         (value: any, obj: any) =>
@@ -157,6 +157,15 @@ export class ResourceModel extends BaseModel {
         }
     )
     probeZone?: Optional<string>;
+    @Expose({ name: 'CreatedOn' })
+    @Transform(
+        (value: any, obj: any) =>
+            transformValue(String, 'createdOn', value, obj, []),
+        {
+            toClassOnly: true,
+        }
+    )
+    createdOn?: Optional<string>;
     @Expose({ name: 'ModifiedOn' })
     @Transform(
         (value: any, obj: any) =>

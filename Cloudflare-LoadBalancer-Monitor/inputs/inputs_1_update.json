@@ -12,5 +12,6 @@
   "AccountIdentifier": "<CLOUDFLARE_ACCOUNT_ID>",
   "FollowRedirects": false,
   "AllowInsecure": false,
+  "Header": {"x-App-ID": ["abc123"], "host": ["example.com"]},
   "ProbeZone": ""
 }
