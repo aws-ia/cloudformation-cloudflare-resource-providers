@@ -2,6 +2,11 @@
     "AccountIdentifier": "<CLOUDFLARE_ACCOUNT_ID>",
     "Name": "CTv2UpdatedName",
     "MinimumOrigins": 1,
+    "OriginSteering": { "Policy": "random"},
+    "LoadShedding": {
+      "DefaultPolicy": "random",
+      "SessionPolicy": "hash"
+    },
     "CheckRegions": [
         "WEU"
     ],
@@ -16,10 +21,10 @@
             "Enabled": true,
             "Address": "<CLOUDFLARE_IP1>",
             "Name": "server-1",
-            "Weight": 0.9
+            "Weight": 0.8
         },
         {
-            "Weight": 0.1,
+            "Weight": 0.2,
             "Enabled": true,
             "Name": "server-2",
             "Address": "<CLOUDFLARE_IP2>"

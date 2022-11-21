@@ -21,11 +21,11 @@ To declare this entity in your AWS CloudFormation template, use the following sy
         "<a href="#enabled" title="Enabled">Enabled</a>" : <i>Boolean</i>,
         "<a href="#latitude" title="Latitude">Latitude</a>" : <i>Double</i>,
         "<a href="#longitude" title="Longitude">Longitude</a>" : <i>Double</i>,
-        "<a href="#loadshedding" title="LoadShedding">LoadShedding</a>" : <i>Map</i>,
+        "<a href="#loadshedding" title="LoadShedding">LoadShedding</a>" : <i><a href="loadshedding.md">LoadShedding</a></i>,
         "<a href="#minimumorigins" title="MinimumOrigins">MinimumOrigins</a>" : <i>Double</i>,
         "<a href="#monitor" title="Monitor">Monitor</a>" : <i>String</i>,
         "<a href="#notificationemail" title="NotificationEmail">NotificationEmail</a>" : <i>String</i>,
-        "<a href="#originsteering" title="OriginSteering">OriginSteering</a>" : <i>Map</i>,
+        "<a href="#originsteering" title="OriginSteering">OriginSteering</a>" : <i><a href="originsteering.md">OriginSteering</a></i>,
     }
 }
 </pre>
@@ -46,11 +46,11 @@ Properties:
     <a href="#enabled" title="Enabled">Enabled</a>: <i>Boolean</i>
     <a href="#latitude" title="Latitude">Latitude</a>: <i>Double</i>
     <a href="#longitude" title="Longitude">Longitude</a>: <i>Double</i>
-    <a href="#loadshedding" title="LoadShedding">LoadShedding</a>: <i>Map</i>
+    <a href="#loadshedding" title="LoadShedding">LoadShedding</a>: <i><a href="loadshedding.md">LoadShedding</a></i>
     <a href="#minimumorigins" title="MinimumOrigins">MinimumOrigins</a>: <i>Double</i>
     <a href="#monitor" title="Monitor">Monitor</a>: <i>String</i>
     <a href="#notificationemail" title="NotificationEmail">NotificationEmail</a>: <i>String</i>
-    <a href="#originsteering" title="OriginSteering">OriginSteering</a>: <i>Map</i>
+    <a href="#originsteering" title="OriginSteering">OriginSteering</a>: <i><a href="originsteering.md">OriginSteering</a></i>
 </pre>
 
 ## Properties
@@ -149,11 +149,11 @@ _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormati
 
 #### LoadShedding
 
-Setting for controlling load shedding for this pool.
+Configures load shedding policies and percentages for the pool
 
 _Required_: No
 
-_Type_: Map
+_Type_: <a href="loadshedding.md">LoadShedding</a>
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
@@ -193,7 +193,7 @@ Set an origin steering policy to control origin selection within a pool.
 
 _Required_: No
 
-_Type_: Map
+_Type_: <a href="originsteering.md">OriginSteering</a>
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
@@ -208,6 +208,10 @@ For more information about using the `Fn::GetAtt` intrinsic function, see [Fn::G
 #### Id
 
 The pool id
+
+#### CreatedOn
+
+When the record was last modified
 
 #### ModifiedOn
 

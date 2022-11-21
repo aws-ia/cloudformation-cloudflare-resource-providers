@@ -59,6 +59,31 @@
                 }
             },
             "additionalProperties": false
+        },
+        "LoadShedding": {
+            "description": "Configures load shedding policies and percentages for the pool",
+            "type": "object",
+            "properties": {
+                "DefaultPercent": {
+                    "type": "integer",
+		    "description": "The percent of traffic to shed from the pool, according to the default policy. Applies to new sessions and traffic without session affinity."
+                },
+                "DefaultPolicy": {
+                    "type": "string",
+                    "description": "The default policy to use when load shedding. A random policy randomly sheds a given percent of requests. A hash policy computes a hash over the CF-Connecting-IP address and sheds all requests originating from a percent of IPs.",
+                    "enum": ["hash", "random"]
+                },
+                "SessionPercent": {
+                    "type": "integer",
+                    "description": "The percent of existing sessions to shed from the pool, according to the session policy."
+                },
+                "SessionPolicy": {
+                    "type": "string",
+                    "description": "Session Policy",
+                    "enum": ["hash"]
+                }
+            },
+            "additionalProperties": false
         }
     },
     "properties": {
@@ -112,8 +137,7 @@
             "description": "The longitude this pool is physically located at; used for proximity steering. Values should be between -180 and 180."
         },
         "LoadShedding": {
-            "type": "object",
-            "description": "Setting for controlling load shedding for this pool."
+            "$ref": "#/definitions/LoadShedding"
         },
         "MinimumOrigins": {
             "type": "number",
@@ -129,7 +153,19 @@
         },
         "OriginSteering": {
             "type": "object",
-            "description": "Set an origin steering policy to control origin selection within a pool."
+            "description": "Set an origin steering policy to control origin selection within a pool.",
+            "properties": {
+                "Policy": {
+                    "type": "string",
+                    "description": "The type of origin steering policy to use, either random or hash (based on CF-Connecting-IP).",
+                    "enum": ["hash", "random"]
+                }
+            },
+            "additionalProperties": false
+        },
+        "CreatedOn": {
+            "type": "string",
+            "description": "When the record was last modified"
         },
         "ModifiedOn": {
             "type": "string",
@@ -149,6 +185,7 @@
     ],
     "readOnlyProperties": [
         "/properties/Id",
+        "/properties/CreatedOn",
         "/properties/ModifiedOn"
     ],
     "primaryIdentifier": [
