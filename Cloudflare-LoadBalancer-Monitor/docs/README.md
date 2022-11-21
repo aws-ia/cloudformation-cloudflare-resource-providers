@@ -20,7 +20,7 @@ To declare this entity in your AWS CloudFormation template, use the following sy
         "<a href="#path" title="Path">Path</a>" : <i>String</i>,
         "<a href="#interval" title="Interval">Interval</a>" : <i>Double</i>,
         "<a href="#retries" title="Retries">Retries</a>" : <i>Double</i>,
-        "<a href="#header" title="Header">Header</a>" : <i>String</i>,
+        "<a href="#header" title="Header">Header</a>" : <i>Map</i>,
         "<a href="#type" title="Type">Type</a>" : <i>String</i>,
         "<a href="#port" title="Port">Port</a>" : <i>Double</i>,
         "<a href="#description" title="Description">Description</a>" : <i>String</i>,
@@ -44,7 +44,7 @@ Properties:
     <a href="#path" title="Path">Path</a>: <i>String</i>
     <a href="#interval" title="Interval">Interval</a>: <i>Double</i>
     <a href="#retries" title="Retries">Retries</a>: <i>Double</i>
-    <a href="#header" title="Header">Header</a>: <i>String</i>
+    <a href="#header" title="Header">Header</a>: <i>Map</i>
     <a href="#type" title="Type">Type</a>: <i>String</i>
     <a href="#port" title="Port">Port</a>: <i>Double</i>
     <a href="#description" title="Description">Description</a>: <i>String</i>
@@ -141,7 +141,7 @@ The HTTP request headers to send in the health check. It is recommended you set 
 
 _Required_: No
 
-_Type_: String
+_Type_: Map
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
@@ -216,6 +216,10 @@ For more information about using the `Fn::GetAtt` intrinsic function, see [Fn::G
 #### Id
 
 Load balancer monitor ID
+
+#### CreatedOn
+
+When the record was created
 
 #### ModifiedOn
 

@@ -64,7 +64,7 @@
             "description": "The number of retries to attempt in case of a timeout before marking the origin as unhealthy. Retries are attempted immediately. Default: 2."
         },
         "Header": {
-            "type": "string",
+            "type": "object",
             "description": "The HTTP request headers to send in the health check. It is recommended you set a Host header by default. The User-Agent header cannot be overridden. Fields documented below. Only valid if type is \"http\" or \"https\"."
         },
         "Type": {
@@ -91,6 +91,10 @@
             "type": "string",
             "description": "Assign this monitor to emulate the specified zone while probing. Only valid if type is \"http\" or \"https\"."
         },
+	"CreatedOn": {
+            "type": "string",
+            "description": "When the record was created"
+	},
         "ModifiedOn": {
             "type": "string",
             "description": "When the record was last modified"
@@ -105,6 +109,7 @@
     ],
     "readOnlyProperties": [
         "/properties/Id",
+        "/properties/CreatedOn",
         "/properties/ModifiedOn"
     ],
     "primaryIdentifier": [
