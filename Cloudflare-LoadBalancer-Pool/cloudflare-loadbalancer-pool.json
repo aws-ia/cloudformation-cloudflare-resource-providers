@@ -1,7 +1,8 @@
 {
     "typeName": "Cloudflare::LoadBalancer::Pool",
     "description": "A resource to manage a pool of origin servers",
-    "sourceUrl": "https://github.com/aws-ia/cloudformation-cloudflare-resource-providers",
+    "sourceUrl": "https://github.com/aws-ia/cloudformation-cloudflare-resource-providers.git",
+    "documentationUrl": "https://github.com/aws-ia/cloudformation-cloudflare-resource-providers",
     "typeConfiguration": {
         "properties": {
             "CloudflareAccess": {

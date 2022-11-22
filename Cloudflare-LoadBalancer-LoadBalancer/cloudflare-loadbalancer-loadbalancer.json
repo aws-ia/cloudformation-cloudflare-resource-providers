@@ -1,7 +1,8 @@
 {
     "typeName": "Cloudflare::LoadBalancer::LoadBalancer",
     "description": "A Cloudflare resource for managing load-balancing across pools",
-    "sourceUrl": "https://github.com/aws-ia/cloudformation-cloudflare-resource-providers",
+    "sourceUrl": "https://github.com/aws-ia/cloudformation-cloudflare-resource-providers.git",
+    "documentationUrl": "https://github.com/aws-ia/cloudformation-cloudflare-resource-providers",
     "typeConfiguration": {
         "properties": {
             "CloudflareAccess": {
