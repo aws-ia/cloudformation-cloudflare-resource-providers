@@ -15,7 +15,7 @@ To get started:
 
 2. Select "Public extensions" from the left hand pane and filter Publisher by "Third Party".
 
-3. Use the search bar to filter by the "NewRelic" prefix.
+3. Use the search bar to filter by the "Cloudflare" prefix.
 
   Note: All official  Cloudflare resources begin with `Cloudflare::` and specify that they are `Published by Cloudflare`.
 
@@ -27,7 +27,7 @@ To get started:
   - Automatic updates for minor version releases
   - Configuration
 
-6. In your terminal, specify the configuration data for the registered New Relic CloudFormation resource type, in the given account and region by using the **SetTypeConfiguration** operation:
+6. In your terminal, specify the configuration data for the registered Cloudflare CloudFormation resource type, in the given account and region by using the **SetTypeConfiguration** operation:
 
 
   For example:
@@ -35,18 +35,18 @@ To get started:
   ```Bash
   $ aws cloudformation set-type-configuration \z`
   --region us-west-2 --type RESOURCE \
-  --type-name NewRelic::Alert::AlertsPolicy \
+  --type-name Cloudflare::LoadBalancer::LoadBalancer \
   --configuration-alias default \
   --configuration "{ \"CloudflareAccess\":{\"Url\":\"https://dash.cloudflare.com/uuid\",\"ApiKey\":\"YOURAPIKEY\"}}"
   ```
 
-7. After you have your resource configured, [create your AWS stack][12] that includes any of the activated NewRelic resources.
+7. After you have your resource configured, [create your AWS stack][12] that includes any of the activated Cloudflare resources.
 
 For more information about available commands and workflows, see the official [AWS documentation][13].
 
 ## Supported regions
 
-The New Relic CloudFormation resources are available on the CloudFormation Public Registry in the following regions:
+The Cloudflare CloudFormation resources are available on the CloudFormation Public Registry in the following regions:
 
 | Code            | Name                      |
 |-----------------|---------------------------|
