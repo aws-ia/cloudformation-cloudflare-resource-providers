@@ -1,13 +1,11 @@
 {
     "AccountIdentifier": "ACCOUNT_ID",
-    "Name": "CTv2Name",
+    "Name": "CTv2UpdatedName",
     "MinimumOrigins": 1,
     "OriginSteering": { "Policy": "random"},
     "LoadShedding": {
-      "DefaultPolicy": "random",
-      "DefaultPercent": 10,
-      "SessionPolicy": "hash",
-      "SessionPercent": 10
+        "DefaultPolicy": "random",
+        "SessionPolicy": "hash"
     },
     "CheckRegions": [
         "WEU"
@@ -23,16 +21,16 @@
             "Enabled": true,
             "Address": "IP_ADDRESS",
             "Name": "server-1",
-            "Weight": 0.9
+            "Weight": 0.8
         },
         {
-            "Weight": 0.1,
+            "Weight": 0.2,
             "Enabled": true,
             "Name": "server-2",
             "Address": "IP_ADDRESS_2"
         }
     ],
-    "Description": "Region Pool",
+    "Description": "Servers",
     "Monitor": "MONITOR_ID",
     "Longitude": 38.8976,
     "Latitude": -77.0365

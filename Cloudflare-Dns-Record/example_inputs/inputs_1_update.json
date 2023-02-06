@@ -4,5 +4,5 @@
     "Name": "DNS_NAME",
     "Content": "IP_ADDRESS",
     "Proxied": false,
-    "Ttl": 600
+    "Ttl": 1
 }

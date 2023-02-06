@@ -1,0 +1,8 @@
+{
+    "ZoneId": "INVALID_ZONE",
+    "Type": "A",
+    "Name": "INVALID_NAME",
+    "Content": "INVALID_IP",
+    "Proxied": false,
+    "Ttl": 60
+}

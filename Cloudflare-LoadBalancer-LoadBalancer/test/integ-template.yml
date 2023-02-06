@@ -1,0 +1,19 @@
+Resources:
+  TestCloudflareLoadBalancer:
+    Type: Cloudflare::LoadBalancer::LoadBalancer
+    Properties:
+      ZoneId: ZONE_ID
+      Proxied: false
+      Name: DOMAIN_NAME
+      SessionAffinity: cookie
+      SessionAffinityTtl: 82800
+      SessionAffinityAttributes:
+        ZeroDowntimeFailover: none
+      SteeringPolicy: 'off'
+      RandomSteering:
+        DefaultWeight: 1
+      DefaultPools:
+        - POOL_ID
+      FallbackPool: POOL_ID
+      Enabled: true
+      Ttl: 30

@@ -1,0 +1,10 @@
+Resources:
+  TestCloudflareDnsRecord:
+    Type: Cloudflare::Dns::Record
+    Properties:
+      ZoneId: "ZONE_ID"
+      Type: "A"
+      Name: "DNS_NAME"
+      Content: "IP_ADDRESS"
+      Proxied: false
+      Ttl: 600

@@ -1,0 +1,23 @@
+Resources:
+  TestCloudflareLoadBalancerMonitor:
+    Type: Cloudflare::LoadBalancer::Monitor
+    Properties:
+      ExpectedBody: ''
+      ExpectedCodes: '200'
+      Method: GET
+      Timeout: 5
+      Path: "/"
+      Interval: 60
+      Retries: 2
+      Description: GET over HTTPS - expect 200
+      Type: http
+      Port: 80
+      AccountIdentifier: ACCOUNT_ID
+      FollowRedirects: false
+      AllowInsecure: false
+      Header:
+        x-App-ID:
+          - abc123
+        host:
+          - example.com
+      ProbeZone: ''

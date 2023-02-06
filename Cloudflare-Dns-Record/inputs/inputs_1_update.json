@@ -1,8 +1,8 @@
 {
-  "ZoneId": "<CLOUDFLARE_ZONE_ID>",
+  "ZoneId": "ZONE_ID",
   "Type": "A",
-  "Name": "<CLOUDFLARE_DOMAIN_NAME>",
-  "Content": ":<CLOUDFLARE_IP1>",
+  "Name": "DNS_NAME",
+  "Content": "IP_ADDRESS",
   "Proxied": false,
   "Ttl": 1
 }

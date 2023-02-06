@@ -9,9 +9,9 @@
   "Description": "GET over HTTPS - expect 200",
   "Type": "http",
   "Port": 80,
-  "AccountIdentifier": "ACCOUNT_ID",
+  "AccountIdentifier": "doesNotExist",
   "FollowRedirects": false,
   "AllowInsecure": false,
-  "Header": {"x-App-ID": ["abc123"], "host": ["example.com"]},
-  "ProbeZone": ""
+  "ProbeZone": "",
+  "Header": {}
 }

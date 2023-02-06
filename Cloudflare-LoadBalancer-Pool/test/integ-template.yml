@@ -1,0 +1,33 @@
+Resources:
+  TestCloudflareLoadBalancerPool:
+    Type: Cloudflare::LoadBalancer::Pool
+    Properties:
+      AccountIdentifier: ACCOUNT_ID
+      Name: CTv2Name
+      MinimumOrigins: 1
+      OriginSteering:
+        Policy: random
+      LoadShedding:
+        DefaultPolicy: random
+        DefaultPercent: 10
+        SessionPolicy: hash
+        SessionPercent: 10
+      CheckRegions:
+        - WEU
+      NotificationEmail: email@example.com
+      NotificationFilter:
+        Pool:
+          Healthy: false
+      Origins:
+        - Enabled: true
+          Address: IP_ADDRESS
+          Name: server-1
+          Weight: 0.9
+        - Weight: 0.1
+          Enabled: true
+          Name: server-2
+          Address: IP_ADDRESS_2
+      Description: Region Pool
+      Monitor: MONITOR_ID
+      Longitude: 38.8976
+      Latitude: -77.0365
