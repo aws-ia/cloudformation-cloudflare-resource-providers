@@ -1,5 +1,5 @@
 {
-    "AccountIdentifier": "<CLOUDFLARE_ACCOUNT_ID>",
+    "AccountIdentifier": "ACCOUNT_ID",
     "Name": "CTv2UpdatedName",
     "MinimumOrigins": 1,
     "OriginSteering": { "Policy": "random"},
@@ -19,7 +19,7 @@
     "Origins": [
         {
             "Enabled": true,
-            "Address": "<CLOUDFLARE_IP1>",
+            "Address": "IP_ADDRESS",
             "Name": "server-1",
             "Weight": 0.8
         },
@@ -27,11 +27,11 @@
             "Weight": 0.2,
             "Enabled": true,
             "Name": "server-2",
-            "Address": "<CLOUDFLARE_IP2>"
+            "Address": "IP_ADDRESS_2"
         }
     ],
     "Description": "Servers",
-    "Monitor": "<CLOUDFLARE_MONITOR_ID>",
+    "Monitor": "MONITOR_ID",
     "Longitude": 38.8976,
     "Latitude": -77.0365
 }

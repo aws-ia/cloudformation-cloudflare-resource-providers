@@ -4,10 +4,10 @@
     "MinimumOrigins": 1,
     "OriginSteering": { "Policy": "random"},
     "LoadShedding": {
-      "DefaultPolicy": "random",
-      "DefaultPercent": 10,
-      "SessionPolicy": "hash",
-      "SessionPercent": 10
+        "DefaultPolicy": "random",
+        "DefaultPercent": 10,
+        "SessionPolicy": "hash",
+        "SessionPercent": 10
     },
     "CheckRegions": [
         "WEU"

@@ -1,0 +1,48 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.7
+    commands:
+      - echo Entered the install phase...
+      - echo About to build $RESOURCE_PATH
+      - export PATH="/usr/local/bin:$PATH"
+      - /usr/local/bin/dockerd-entrypoint.sh
+      - cat /var/log/docker.log
+      - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
+      - export NVM_DIR="$HOME/.nvm"
+      - echo "Loading nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && nvm install 14 && nvm install-latest-npm
+      - npm --version
+      - node --version
+      - pwd
+      - ls
+
+  build:
+    commands:
+      - echo Entered the build phase...
+      - npm install && npm run build
+      - cd $RESOURCE_PATH
+      - TYPE_NAME=$(cat .rpdk-config | jq -r .typeName)
+      - echo "TYPE_NAME is $TYPE_NAME"
+      - if test -x ./setup.sh; then ./setup.sh; fi
+      - cfn validate
+      - cfn generate
+      - if test -e ./test/setup.yml; then SETUP_STACK_NAME="setup-$(echo $RESOURCE_PATH | sed s/_/-/g)"; fi
+      - if test -e ./test/setup.yml; then aws cloudformation create-stack --stack-name $SETUP_STACK_NAME --template-body file://test/setup.yml; fi
+      - if test -e ./test/setup.yml; then aws cloudformation wait stack-create-complete --stack-name $SETUP_STACK_NAME; fi
+      - npm install && npm run build
+      - python ../get_type_configuration.py
+      - cfn submit --dry-run
+      - nohup sam local start-lambda --log-file sam_output.log &>/dev/null &
+      - sleep 10
+      - if ! cfn test --region $AWS_REGION -- -o log_cli=True -o log_cli_level=WARN -o console_output_style=count; then cat sam_output.log && exit 1; fi
+    finally:
+      - cat rpdk.log
+      - if test -e ./test/setup.yml; then aws cloudformation delete-stack --stack-name $SETUP_STACK_NAME; fi
+      - if test -x ./cleanup.sh; then ./cleanup.sh; fi
+artifacts:
+  files:
+    - $BUILD_FILE_NAME
+  name: extensions-build
+

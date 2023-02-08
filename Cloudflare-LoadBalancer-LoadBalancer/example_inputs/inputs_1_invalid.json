@@ -1,9 +1,9 @@
 {
-  "ZoneId": "ZONE_ID",
+  "ZoneId": "idDoesNotExist",
   "Proxied": true,
-  "Name": "DOMAIN_NAME",
+  "Name": "acme.com",
   "SessionAffinity": "none",
-  "SessionAffinityTtl": 82800,
+  "SessionAffinityTtl": 79200,
   "SessionAffinityAttributes": {
     "ZeroDowntimeFailover": "none"
   },
@@ -14,10 +14,10 @@
     "DefaultWeight": 1
   },
   "DefaultPools": [
-    "POOL_ID"
+    "idDoesNotExist"
   ],
   "Rules": [],
-  "FallbackPool": "POOL_ID",
+  "FallbackPool": "idDoesNotExist",
   "Enabled": true,
-  "Ttl": 60
+  "Ttl": 500
 }
