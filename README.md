@@ -51,7 +51,7 @@ To get started:
   --region us-west-2 --type RESOURCE \
   --type-name Cloudflare::LoadBalancer::Pool \
   --configuration-alias default \
-  --configuration "{ \"CloudflareAccess\":{\"Url\":\"https://dash.cloudflare.com/uuid\",\"ApiKey\":\"YOURAPIKEY\"}}"
+  --configuration "{ \"CloudflareAccess\":{\"Url\":\"https://api.cloudflare.com/client/v4\",\"ApiKey\":\"YOURAPIKEY\"}}"
   ```
 
 7. After you have your resource configured, [create your AWS stack][12] that includes any of the activated Cloudflare resources.
